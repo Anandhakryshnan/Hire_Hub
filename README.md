@@ -1,4 +1,4 @@
-# 🎓 University Placement Management System
+# 🎓Placement Management System
 
 ## Table of Contents
 - [📖 Introduction](#introduction)
@@ -11,7 +11,7 @@
 - [📜 License](#license)
 
 ## 📖 Introduction
-The University Placement Management System is designed to streamline and enhance the placement process for universities, students, and companies. Built using the MERN stack, the system provides a user-friendly platform for job matching, communication, and data management.
+The Placement Management System is designed to streamline and enhance the placement process for universities, students, and companies. Built using the MERN stack, the system provides a user-friendly platform for job matching, communication, and data management.
 
 ## ✨ Features
 - **Efficient Placement Management**: Automates and streamlines the placement process, reducing manual administrative tasks.
