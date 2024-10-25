@@ -38,7 +38,7 @@ The Placement Management System is designed to streamline and enhance the placem
 1. **Clone the repository:**
     ```bash
     git clone https://github.com/Anandhakryshnan/Hire_Hub.git
-    cd Placement-Management-System
+    cd Hire_Hub
     ```
 
 2. **Install backend dependencies:**
