@@ -37,7 +37,7 @@ The University Placement Management System is designed to streamline and enhance
 ### Steps
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/Anandhakryshnan/Placement-Management-System.git
+    git clone https://github.com/Anandhakryshnan/Hire_Hub.git
     cd Placement-Management-System
     ```
 
