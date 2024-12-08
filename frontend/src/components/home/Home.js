@@ -243,7 +243,7 @@ const StudentHome = () => {
                 {/* navigation */}
                 <div className='relative flex flex-col items-center justify-center mx-6 mt-16 mb-8 font-bold text-center capitalize font-onest gap-y-2'>
                     <div className='text-2xl md:text-3xl'>
-                        popular online courses
+                        popular online courses.
                     </div>
 
                     <div className='flex items-center justify-between w-full h-full text-2xl font-bold md:text-3xl lsm:absolute lsm:left-0 lsm:top-0'>
