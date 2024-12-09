@@ -64,7 +64,7 @@ The Placement Management System is designed to streamline and enhance the placem
     - Start the backend server:
       ```bash
       cd backend
-      npm start
+      npm run dev
       ```
     - Start the frontend server:
       ```bash
