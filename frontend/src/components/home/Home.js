@@ -36,29 +36,29 @@ const ButtonWithCard = ({ imgSrc, alt, text, bgColor, textColor, titleColor }) =
     );
 };
 
-const AboutUsCard = ({ link, title, details }) => {
-    return (
-        <div className={` flex items-center justify-between gap-x-10 bg-[#e7fff3] hover:bg-[#e5f5fc] ring-[1px] ring-green-700 hover:ring-blue-700 hover:shadow-md hover:shadow-blue-700 rounded-md overflow-hidden p-3 cursor-pointer group`}>
-            <div className=' min-w-20 max-w-20 min-h-20 max-h-20'>
-                <img 
-                    src={link} 
-                    className='w-full h-full '
-                    alt="images" 
-                />
-            </div>
+// const AboutUsCard = ({ link, title, details }) => {
+//     return (
+//         <div className={` flex items-center justify-between gap-x-10 bg-[#e7fff3] hover:bg-[#e5f5fc] ring-[1px] ring-green-700 hover:ring-blue-700 hover:shadow-md hover:shadow-blue-700 rounded-md overflow-hidden p-3 cursor-pointer group`}>
+//             {/* <div className=' min-w-20 max-w-20 min-h-20 max-h-20'>
+//                 <img 
+//                     src={link} 
+//                     className='w-full h-full '
+//                     alt="images" 
+//                 />
+//             </div> */}
 
-            <div className={` flex flex-col gap-y-3 text-green-800 hover:text-blue-900`}>
-                <div className='text-2xl font-bold capitalize font-mavenPro'>
-                    {title}
-                </div>
+//             <div className={` flex flex-col gap-y-1 text-green-800 hover:text-blue-900`}>
+//                 <div className='text-2xl font-bold capitalize font-mavenPro'>
+//                     {title}
+//                 </div>
 
-                <div className=' font-mavenPro xl:text-lg'>
-                    {details}
-                </div>
-            </div>
-        </div>
-    );
-};
+//                 <div className=' font-mavenPro xl:text-lg'>
+//                     {details}   
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
 
 const StudentHome = () => {
     const [isSearchBarHanging, setIsSearchBarHanging] = useState(false);
@@ -178,9 +178,9 @@ const StudentHome = () => {
                     </div>
 
                     {/* cards */}
-                    <div className='xl:pt-10 3xl:pt-16'>
+                    <div>
                         {/* upper */}
-                        <div className='flex flex-col items-center justify-center Lmd:items-start'>
+                        {/* <div className='flex flex-col items-center justify-center Lmd:items-start'>
                             <div className=' uppercase font-jaldi font-bold text-[1.2rem] xl:text-[1.7rem] text-slate-700'>
                                 Master everything
                             </div>
@@ -188,27 +188,61 @@ const StudentHome = () => {
                             <div className='capitalize font-jaldi font-bold text-[2.3rem] md:text-[2.7rem] xl:text-[3.3rem] text-slate-700 text-wrap '>
                                 what sets us apart
                             </div>
-                        </div>
+                        </div> */}
 
                         {/* lower */}
-                        <div className='w-full mt-10 space-y-5 xl:space-y-9 3xl:space-y-7 xl:mt-16'>
-                            {aboutUsCardContent.map((val, index) => (
+                        <div className='w-full  space-y-5 xl:space-y-9 3xl:space-y-7 xl:mt-16'>
+                            <div className={` flex items-center justify-between gap-x-10 bg-[#e7fff3] hover:bg-[#e5f5fc] ring-[1px] ring-green-700 hover:ring-blue-700 hover:shadow-md hover:shadow-blue-700 rounded-md overflow-hidden p-3 cursor-pointer group`}>
+
+                                <div className={` flex flex-col gap-y-1 text-green-800 hover:text-blue-900`}>
+                                    <div className='text-2xl font-bold capitalize font-mavenPro'>
+                                        Our Vision
+                                    </div>
+
+                                    <div className=' font-mavenPro xl:text-lg'>
+                                        To be a premier technical institution imparting knowledge, to carve technically competent and research minded professionals with social responsibilities
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div className={` flex items-center justify-between gap-x-10 bg-[#e7fff3] hover:bg-[#e5f5fc] ring-[1px] ring-green-700 hover:ring-blue-700 hover:shadow-md hover:shadow-blue-700 rounded-md overflow-hidden p-3 cursor-pointer group`}>
+
+                                <div className={` flex flex-col gap-y-1 text-green-800 hover:text-blue-900`}>
+                                    <div className='text-2xl font-bold capitalize font-mavenPro'>
+                                        Our MIssion
+                                    </div>
+
+                                    <div className='p-2 font-mavenPro xl:text-lg'>
+                                        1. Facilitate quality engineering education through state-of-the-art facilities and qualified vibrant teachers
+                                    </div>
+                                    <div className='p-2 font-mavenPro xl:text-lg'>
+                                        2. Transform students to responsible professionals with ethical and social values capable of providing innovative solutions to the problems faced by the country and to enhance the quality of life of the people
+                                    </div>
+                                    <div className='p-2 font-mavenPro xl:text-lg'>
+                                        3. Accomplish a conducive learning environment to equip students for higher education and life-long learning
+                                    </div>
+                                    <div className='p-2 font-mavenPro xl:text-lg'>
+                                        4. Instill managerial skills and entrepreneurial capabilities
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            {/* {aboutUsCardContent.map((val, index) => (
                                 <AboutUsCard
                                     key={index+val.title}
                                     title={val.title}
                                     details={val.details}
-                                    link={val.link}
                                     bgColor={val.bgColor}
                                     textColor={val.textColor}
                                 />
-                            ))}
+                            ))} */}
                         </div>
                     </div>
                 </div>
             </div>
 
             {/* stats */}
-            <div 
+            {/* <div 
             className={`h-[23rem] grid grid-cols-2 2xl:grid-cols-4 place-items-center place-content-center gap-14 px-4 sm:px-6 md:px-16 bg-bottom`}
             style={{
                 backgroundImage: `url('${statBg}')`,
@@ -236,12 +270,12 @@ const StudentHome = () => {
                         </span>
                     </span>
                 ))}
-            </div>
+            </div> */}
 
             {/* popular online courses */}
             <>
                 {/* navigation */}
-                <div className='relative flex flex-col items-center justify-center mx-6 mt-16 mb-8 font-bold text-center capitalize font-onest gap-y-2'>
+                {/* <div className='relative flex flex-col items-center justify-center mx-6 mt-16 mb-8 font-bold text-center capitalize font-onest gap-y-2'>
                     <div className='text-2xl md:text-3xl'>
                         popular online courses.
                     </div>
@@ -249,7 +283,7 @@ const StudentHome = () => {
                     <div className='flex items-center justify-between w-full h-full text-2xl font-bold md:text-3xl lsm:absolute lsm:left-0 lsm:top-0'>
                         <button className='flex items-center justify-center w-12 h-8 text-yellow-300 transition-all rounded-full cursor-pointer lsm:w-14 bg-slate-900 active:scale-110'
                         onClick={handlePrevious}>
-                            <GoArrowLeft className=''/>
+                            <GoArrowLeft />
                         </button>
                         
                         <button className='flex items-center justify-center w-12 h-8 text-yellow-300 transition-all rounded-full lsm:w-14 bg-slate-900 active:scale-110'
@@ -257,15 +291,15 @@ const StudentHome = () => {
                             <GoArrowRight className=''/>
                         </button>
                     </div>
-                </div>
+                </div> */}
                 
                 {/* cards */}
-                <div className='flex flex-wrap items-center justify-center gap-16 px-10'>  
+                {/* <div className='flex flex-wrap items-center justify-center gap-16 px-10'>  
                     {coursesCard.slice(0, courseDisplay).map((course, index) => (
                         <div 
                         className='px-4 py-3 overflow-hidden duration-200 rounded-lg hover:rounded-md shadow-xl shadow-slate-400 hover:shadow-violet-400 group bg-slate-200 hover:bg-gradient-to-br hover:from-indigo-200 hover:via-violet-100 hover:to-blue-100 w-[28rem] h-fit transition-all'
                         key={index}>
-                            {/* upper */}
+                            
                             <div className='flex items-center justify-center w-full'>
                                 <div className='flex items-center justify-center gap-x-5'>
                                     <div className='flex items-center justify-center 
@@ -287,10 +321,10 @@ const StudentHome = () => {
                                 </div>
                             </div>
                             
-                            {/* mid */}
+                            
                             <div className='lsm:px-3 space-y-5 '>
                                 <div className='flex items-center justify-between mt-3 '>
-                                    {/* person details */}
+                                    
                                     <div className='space-y-1 transition-all font-mavenPro group-hover:-translate-x-2'>
                                         <div className=' font-bold text-[1.1rem] sm:text-[1.2rem] text-blue-900'>
                                             {course.courTeacher[0].name}
@@ -301,7 +335,7 @@ const StudentHome = () => {
                                         </div>
                                     </div>
 
-                                    {/* avatar */}
+                                    
                                     <div className='w-[5.3rem] h-[3.8rem] rounded-md overflow-hidden group-hover:translate-x-2 transition-all'>
                                         <img 
                                             src={course.courTeacher[0].dcover}
@@ -312,21 +346,20 @@ const StudentHome = () => {
                                 </div>
 
                                 <div className='flex items-center justify-between gap-x-8 lsm:gap-x-16'>
-                                    {/* stars */}
                                     <div className='flex items-center text-xl transition-all lsm:gap-x-1 group-hover:-translate-x-2'>
                                         {[...Array(5)].map((_, i) => (
                                             <TiStarFullOutline key={i} className='transition-all group-hover:scale-110'/>
                                         ))}
                                     </div>
 
-                                    {/* value */}
+
                                     <div className='uppercase flex items-center justify-center font-onest text-[.9rem] lsm:text-[1rem] w-full bg-slate-300 text-slate-900 font-bold tracking-wide group-hover:translate-x-2 py-1 rounded-md transition-all max-w-[10rem]'>
                                         {course.priceAll} / {course.pricePer}
                                     </div>
                                 </div>
                             </div>
 
-                            {/* lower */}
+
                             <a href={course.joinNowLink} className='no-underline '>
                                 <button className='flex items-center justify-center w-full py-2 mt-4 text-lg sm:text-xl font-bold tracking-wide text-white uppercase transition-all rounded-md font-onest bg-slate-700 group-hover:bg-slate-900 group-hover:translate-y-1'>
                                     join now
@@ -334,11 +367,11 @@ const StudentHome = () => {
                             </a>
                         </div>
                     ))}
-                </div>
+                </div> */}
             </>
 
             {/* best online courses */}
-            <div className='flex flex-col items-center justify-center mt-10 gap-y-10'>
+            {/* <div className='flex flex-col items-center justify-center mt-10 gap-y-10'>
                 <div className='flex flex-col items-center space-y-3 '>
                     <div className='text-[1.6rem] xl:text-[2rem] font-bold font-montserrat bg-gradient-to-br from-indigo-700 via-violet-700 to-blue-800 bg-clip-text text-transparent'>
                         Courses
@@ -380,7 +413,7 @@ const StudentHome = () => {
                         </div>
                     ))}
                 </div>
-            </div>
+            </div> */}
 
             {/* cards */}
             <div className="w-full px-3 pb-5 mt-16">
@@ -673,8 +706,6 @@ const userActions = ({selectedArray}) => {
 
 
 const Footer = () => {
-    const [email, setEmail] = useState('');
-    const [isFocused, setIsFocused] = useState(false);
     const navigate = useNavigate();
 
     const iconArray = [
@@ -685,72 +716,17 @@ const Footer = () => {
         {icon: <FaLinkedin/>, className: 'text-2xl text-blue-600', href: '#'},
     ];
 
-    const handleInputChange = (event) => {
-        setEmail(event.target.value);
-    };
-
-    const handleFocus = (event) => {
-        event.target.select();
-        setIsFocused(true);
-    }
-
-    const handleBlur = () => {
-        setIsFocused(false);
-    }
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Form Submitted!');
-        console.log(email);
-    };
-
-    const handleRedirect = () => {
-        navigate(`/`);
-        window.scrollTo(0, 0);
-    };
     
     return (
         <footer className=" bg-slate-900">
-            <div className="px-4 pt-10 pb-6 mx-auto sm:px-6 lg:px-8">
+            <div className="px-4 pt-2 pb-6 mx-auto sm:px-6 lg:px-8">
                 {/* upper part */}
                 <div className="">
                     {/* icon and form */}
-                    <div className="flex items-center justify-between text-teal-400">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 28 24" 
-                        className="hidden h-8 cursor-pointer md:block" 
-                        fill="none" 
-                        onClick={handleRedirect}>
-                            <path
-                                d="M0.41 10.3847C1.14777 7.4194 2.85643 4.7861 5.2639 2.90424C7.6714 1.02234 10.6393 0 13.695 0C16.7507 0 19.7186 1.02234 22.1261 2.90424C24.5336 4.7861 26.2422 7.4194 26.98 10.3847H25.78C23.7557 10.3549 21.7729 10.9599 20.11 12.1147C20.014 12.1842 19.9138 12.2477 19.81 12.3047H19.67C19.5662 12.2477 19.466 12.1842 19.37 12.1147C17.6924 10.9866 15.7166 10.3841 13.695 10.3841C11.6734 10.3841 9.6976 10.9866 8.02 12.1147C7.924 12.1842 7.8238 12.2477 7.72 12.3047H7.58C7.4762 12.2477 7.376 12.1842 7.28 12.1147C5.6171 10.9599 3.6343 10.3549 1.61 10.3847H0.41ZM23.62 16.6547C24.236 16.175 24.9995 15.924 25.78 15.9447H27.39V12.7347H25.78C24.4052 12.7181 23.0619 13.146 21.95 13.9547C21.3243 14.416 20.5674 14.6649 19.79 14.6649C19.0126 14.6649 18.2557 14.416 17.63 13.9547C16.4899 13.1611 15.1341 12.7356 13.745 12.7356C12.3559 12.7356 11.0001 13.1611 9.86 13.9547C9.2343 14.416 8.4774 14.6649 7.7 14.6649C6.9226 14.6649 6.1657 14.416 5.54 13.9547C4.4144 13.1356 3.0518 12.7072 1.66 12.7347H0V15.9447H1.61C2.39051 15.924 3.154 16.175 3.77 16.6547C4.908 17.4489 6.2623 17.8747 7.65 17.8747C9.0377 17.8747 10.392 17.4489 11.53 16.6547C12.1468 16.1765 12.9097 15.9257 13.69 15.9447C14.4708 15.9223 15.2348 16.1735 15.85 16.6547C16.9901 17.4484 18.3459 17.8738 19.735 17.8738C21.1241 17.8738 22.4799 17.4484 23.62 16.6547ZM23.62 22.3947C24.236 21.915 24.9995 21.664 25.78 21.6847H27.39V18.4747H25.78C24.4052 18.4581 23.0619 18.886 21.95 19.6947C21.3243 20.156 20.5674 20.4049 19.79 20.4049C19.0126 20.4049 18.2557 20.156 17.63 19.6947C16.4899 18.9011 15.1341 18.4757 13.745 18.4757C12.3559 18.4757 11.0001 18.9011 9.86 19.6947C9.2343 20.156 8.4774 20.4049 7.7 20.4049C6.9226 20.4049 6.1657 20.156 5.54 19.6947C4.4144 18.8757 3.0518 18.4472 1.66 18.4747H0V21.6847H1.61C2.39051 21.664 3.154 21.915 3.77 22.3947C4.908 23.1889 6.2623 23.6147 7.65 23.6147C9.0377 23.6147 10.392 23.1889 11.53 22.3947C12.1468 21.9165 12.9097 21.6657 13.69 21.6847C14.4708 21.6623 15.2348 21.9135 15.85 22.3947C16.9901 23.1884 18.3459 23.6138 19.735 23.6138C21.1241 23.6138 22.4799 23.1884 23.62 22.3947Z"
-                                fill="currentColor"
-                            />
-                        </svg>
-
-                        <form className="flex w-full md:w-[75%] lg:w-[65%] xl:w-[45rem] rounded-lg"
-                        onSubmit={handleSubmit}>
-                            <div className="relative w-full h-full">
-                                <input
-                                    type="email"
-                                    className={`border-b-2 border-slate-300 pt-2.5 pb-2 pl-2 pr-[6rem] focus:border-b-2 ${(email || isFocused) ? 'border-indigo-500' : ''} transition-colors focus:outline-none peer bg-slate-800 w-full h-full font-robotoMono placeholder:text-cyan-300`}
-                                    onChange={handleInputChange}
-                                    onFocus={handleFocus}
-                                    onBlur={handleBlur}
-                                    placeholder='Email address'
-                                />
-
-                                <button
-                                className={`bg-slate-800 text-slate-200 font-robotoMono flex items-center justify-center flex-wrap w-[5.5rem] absolute right-0 bottom-2`}
-                                type="submit">
-                                    Sign Up
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                    
                     
                     {/* content */}
-                    <div className="grid w-full mt-14 xsm:grid-cols-2 md:grid-cols-3 Lmd:grid-cols-5 gap-x-16 gap-y-14 place-content-center">
+                    {/* <div className="grid w-full mt-14 xsm:grid-cols-2 md:grid-cols-3 Lmd:grid-cols-5 gap-x-16 gap-y-14 place-content-center">
                         {footerLists.map((list, index) => (
                             <div 
                             className={`max-w-[10rem]`}
@@ -771,7 +747,7 @@ const Footer = () => {
                                 </div>
                             </div>
                         ))}
-                    </div>
+                    </div> */}
                     
                     {/* social media icons */}
                     <div className='flex items-center justify-center w-full mt-10 sm:justify-end gap-x-5'>
