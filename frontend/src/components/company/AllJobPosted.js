@@ -32,8 +32,10 @@ const AllJobPosted = () => {
                 });
             })
     }, [])
-    const handleViewApplicants = (id) => {
-        fetch(`http://localhost:9000/api/getCandidateList/${id}`)
+    const handleViewApplicants = (jobId) => {
+        console.log(jobId);
+        
+        fetch(`http://localhost:9000/api/getCandidateList/${jobId}`)
             .then((response) => response.json())
             .then((data) => {
                 navigate('/LOSA', { state: { data: data } });
@@ -53,7 +55,7 @@ const AllJobPosted = () => {
                         {jobs?.map((job, indx) => (  
                             <AnimatedGradientBorderTW key={indx}>
                                 <div className=' cursor-pointer bg-[#7730fc58] rounded-lg no-underline'
-                                onClick={handleViewApplicants}>
+                                onClick={() => handleViewApplicants(job._id)}>
                                     <div className="rounded-lg w-[20rem] h-fit overflow-hidden shadow-lg">
                                         <div className=' w-full min-h-[20rem] max-h-[20rem]'>
                                             <img 
