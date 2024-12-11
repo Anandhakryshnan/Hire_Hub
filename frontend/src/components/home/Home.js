@@ -36,29 +36,48 @@ const ButtonWithCard = ({ imgSrc, alt, text, bgColor, textColor, titleColor }) =
     );
 };
 
-// const AboutUsCard = ({ link, title, details }) => {
-//     return (
-//         <div className={` flex items-center justify-between gap-x-10 bg-[#e7fff3] hover:bg-[#e5f5fc] ring-[1px] ring-green-700 hover:ring-blue-700 hover:shadow-md hover:shadow-blue-700 rounded-md overflow-hidden p-3 cursor-pointer group`}>
-//             {/* <div className=' min-w-20 max-w-20 min-h-20 max-h-20'>
-//                 <img 
-//                     src={link} 
-//                     className='w-full h-full '
-//                     alt="images" 
-//                 />
-//             </div> */}
+export const AboutUsCard = ({ link, title, details }) => {
+    return (
+        <div className='w-full  space-y-5 xl:space-y-9 3xl:space-y-7 xl:mt-16'>
+            <div className={` flex items-center justify-between gap-x-10 bg-[#e7fff3] hover:bg-[#e5f5fc] ring-[1px] ring-green-700 hover:ring-blue-700 hover:shadow-md hover:shadow-blue-700 rounded-md overflow-hidden p-3 cursor-pointer group`}>
 
-//             <div className={` flex flex-col gap-y-1 text-green-800 hover:text-blue-900`}>
-//                 <div className='text-2xl font-bold capitalize font-mavenPro'>
-//                     {title}
-//                 </div>
+                <div className={` flex flex-col gap-y-1 text-green-800 hover:text-blue-900`}>
+                    <div className='text-2xl font-bold capitalize font-mavenPro'>
+                        Our Vision
+                    </div>
 
-//                 <div className=' font-mavenPro xl:text-lg'>
-//                     {details}   
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
+                    <div className=' font-mavenPro xl:text-lg'>
+                        To be a premier technical institution imparting knowledge, to carve technically competent and research minded professionals with social responsibilities
+                    </div>
+                </div>
+                
+            </div>
+            <div className={` flex items-center justify-between gap-x-10 bg-[#e7fff3] hover:bg-[#e5f5fc] ring-[1px] ring-green-700 hover:ring-blue-700 hover:shadow-md hover:shadow-blue-700 rounded-md overflow-hidden p-3 cursor-pointer group`}>
+
+                <div className={` flex flex-col gap-y-1 text-green-800 hover:text-blue-900`}>
+                    <div className='text-2xl font-bold capitalize font-mavenPro'>
+                        Our MIssion
+                    </div>
+
+                    <div className='p-2 font-mavenPro xl:text-lg'>
+                        1. Facilitate quality engineering education through state-of-the-art facilities and qualified vibrant teachers
+                    </div>
+                    <div className='p-2 font-mavenPro xl:text-lg'>
+                        2. Transform students to responsible professionals with ethical and social values capable of providing innovative solutions to the problems faced by the country and to enhance the quality of life of the people
+                    </div>
+                    <div className='p-2 font-mavenPro xl:text-lg'>
+                        3. Accomplish a conducive learning environment to equip students for higher education and life-long learning
+                    </div>
+                    <div className='p-2 font-mavenPro xl:text-lg'>
+                        4. Instill managerial skills and entrepreneurial capabilities
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    );
+};
+
 
 const StudentHome = () => {
     const [isSearchBarHanging, setIsSearchBarHanging] = useState(false);
@@ -117,7 +136,7 @@ const StudentHome = () => {
             {/* navbar */}
             <div className='absolute flex flex-col items-center w-full top-10 gap-y-4'>
                 <div className='rounded-lg w-[96%] bg-[#0f172a25] backdrop-blur-md'>
-                    <NavBar/>
+                    <NavBar selectedTab={tabs[0].text}/>
                 </div>
             </div>               
 
@@ -179,241 +198,10 @@ const StudentHome = () => {
 
                     {/* cards */}
                     <div>
-                        {/* upper */}
-                        {/* <div className='flex flex-col items-center justify-center Lmd:items-start'>
-                            <div className=' uppercase font-jaldi font-bold text-[1.2rem] xl:text-[1.7rem] text-slate-700'>
-                                Master everything
-                            </div>
-
-                            <div className='capitalize font-jaldi font-bold text-[2.3rem] md:text-[2.7rem] xl:text-[3.3rem] text-slate-700 text-wrap '>
-                                what sets us apart
-                            </div>
-                        </div> */}
-
-                        {/* lower */}
-                        <div className='w-full  space-y-5 xl:space-y-9 3xl:space-y-7 xl:mt-16'>
-                            <div className={` flex items-center justify-between gap-x-10 bg-[#e7fff3] hover:bg-[#e5f5fc] ring-[1px] ring-green-700 hover:ring-blue-700 hover:shadow-md hover:shadow-blue-700 rounded-md overflow-hidden p-3 cursor-pointer group`}>
-
-                                <div className={` flex flex-col gap-y-1 text-green-800 hover:text-blue-900`}>
-                                    <div className='text-2xl font-bold capitalize font-mavenPro'>
-                                        Our Vision
-                                    </div>
-
-                                    <div className=' font-mavenPro xl:text-lg'>
-                                        To be a premier technical institution imparting knowledge, to carve technically competent and research minded professionals with social responsibilities
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            <div className={` flex items-center justify-between gap-x-10 bg-[#e7fff3] hover:bg-[#e5f5fc] ring-[1px] ring-green-700 hover:ring-blue-700 hover:shadow-md hover:shadow-blue-700 rounded-md overflow-hidden p-3 cursor-pointer group`}>
-
-                                <div className={` flex flex-col gap-y-1 text-green-800 hover:text-blue-900`}>
-                                    <div className='text-2xl font-bold capitalize font-mavenPro'>
-                                        Our MIssion
-                                    </div>
-
-                                    <div className='p-2 font-mavenPro xl:text-lg'>
-                                        1. Facilitate quality engineering education through state-of-the-art facilities and qualified vibrant teachers
-                                    </div>
-                                    <div className='p-2 font-mavenPro xl:text-lg'>
-                                        2. Transform students to responsible professionals with ethical and social values capable of providing innovative solutions to the problems faced by the country and to enhance the quality of life of the people
-                                    </div>
-                                    <div className='p-2 font-mavenPro xl:text-lg'>
-                                        3. Accomplish a conducive learning environment to equip students for higher education and life-long learning
-                                    </div>
-                                    <div className='p-2 font-mavenPro xl:text-lg'>
-                                        4. Instill managerial skills and entrepreneurial capabilities
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            {/* {aboutUsCardContent.map((val, index) => (
-                                <AboutUsCard
-                                    key={index+val.title}
-                                    title={val.title}
-                                    details={val.details}
-                                    bgColor={val.bgColor}
-                                    textColor={val.textColor}
-                                />
-                            ))} */}
-                        </div>
+                        <AboutUsCard />
                     </div>
                 </div>
             </div>
-
-            {/* stats */}
-            {/* <div 
-            className={`h-[23rem] grid grid-cols-2 2xl:grid-cols-4 place-items-center place-content-center gap-14 px-4 sm:px-6 md:px-16 bg-bottom`}
-            style={{
-                backgroundImage: `url('${statBg}')`,
-            }}>
-                {statCard.map((stat, i) => (
-                    <span 
-                    className=' flex items-center gap-x-2 w-[7.7rem] sm:w-[12rem] md:w-[15rem] xl:w-[18rem]'
-                    key={i+stat.title}>
-                        <span className='w-[3.4rem] sm:w-[3.8rem] md:w-[4.5rem] xl:w-[5.1rem] h-[3.4rem] sm:h-[3.8rem] md:h-[4.5rem] xl:h-[5.1rem] hidden sm:block'>
-                            <img 
-                                src={stat.imgLink} 
-                                className='w-full h-full '
-                                alt={stat.title} 
-                            />
-                        </span>
-
-                        <span className=''>
-                            <div className='text-[1.4rem] md:text-[1.7rem] xl:text-[1.9rem] font-bold font-onest text-white'>
-                                {stat.num}
-                            </div>
-
-                            <div className='text-[1rem] md:text-[1.2rem] xl:text-[1.4rem] font-bold font-onest text-white capitalize'>
-                                {stat.title}
-                            </div>
-                        </span>
-                    </span>
-                ))}
-            </div> */}
-
-            {/* popular online courses */}
-            <>
-                {/* navigation */}
-                {/* <div className='relative flex flex-col items-center justify-center mx-6 mt-16 mb-8 font-bold text-center capitalize font-onest gap-y-2'>
-                    <div className='text-2xl md:text-3xl'>
-                        popular online courses.
-                    </div>
-
-                    <div className='flex items-center justify-between w-full h-full text-2xl font-bold md:text-3xl lsm:absolute lsm:left-0 lsm:top-0'>
-                        <button className='flex items-center justify-center w-12 h-8 text-yellow-300 transition-all rounded-full cursor-pointer lsm:w-14 bg-slate-900 active:scale-110'
-                        onClick={handlePrevious}>
-                            <GoArrowLeft />
-                        </button>
-                        
-                        <button className='flex items-center justify-center w-12 h-8 text-yellow-300 transition-all rounded-full lsm:w-14 bg-slate-900 active:scale-110'
-                        onClick={handleNext}>
-                            <GoArrowRight className=''/>
-                        </button>
-                    </div>
-                </div> */}
-                
-                {/* cards */}
-                {/* <div className='flex flex-wrap items-center justify-center gap-16 px-10'>  
-                    {coursesCard.slice(0, courseDisplay).map((course, index) => (
-                        <div 
-                        className='px-4 py-3 overflow-hidden duration-200 rounded-lg hover:rounded-md shadow-xl shadow-slate-400 hover:shadow-violet-400 group bg-slate-200 hover:bg-gradient-to-br hover:from-indigo-200 hover:via-violet-100 hover:to-blue-100 w-[28rem] h-fit transition-all'
-                        key={index}>
-                            
-                            <div className='flex items-center justify-center w-full'>
-                                <div className='flex items-center justify-center gap-x-5'>
-                                    <div className='flex items-center justify-center 
-                                    min-w-[5rem] max-w-[5rem] 
-                                    min-h-[5rem] max-h-[5rem]
-                                    sm:min-w-[5.5rem] sm:max-w-[5.5rem] 
-                                    sm:min-h-[5.5rem] sm:max-h-[5.5rem] 
-                                    p-3 overflow-hidden rounded-full bg-slate-800 group-hover:bg-cyan-700 duration-150 group-hover:scale-105 transition-all'>
-                                        <img 
-                                            src={course.cover}
-                                            className='w-full h-full transition-all group-hover:scale-110'
-                                            alt={course.coursesName}
-                                        />
-                                    </div>
-                                    
-                                    <div className='text-[1rem] lsm:text-[1.2rem] font-bold font-montserrat group-hover:text-indigo-800  duration-200 group-hover:translate-x-4 group-hover:-translate-y-1'>
-                                        {course.coursesName}
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            
-                            <div className='lsm:px-3 space-y-5 '>
-                                <div className='flex items-center justify-between mt-3 '>
-                                    
-                                    <div className='space-y-1 transition-all font-mavenPro group-hover:-translate-x-2'>
-                                        <div className=' font-bold text-[1.1rem] sm:text-[1.2rem] text-blue-900'>
-                                            {course.courTeacher[0].name}
-                                        </div>
-
-                                        <div className=' font-bold text-[.9rem]'>
-                                            {course.courTeacher[0].totalTime}
-                                        </div>
-                                    </div>
-
-                                    
-                                    <div className='w-[5.3rem] h-[3.8rem] rounded-md overflow-hidden group-hover:translate-x-2 transition-all'>
-                                        <img 
-                                            src={course.courTeacher[0].dcover}
-                                            className='w-full h-full '
-                                            alt={course.coursesName}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className='flex items-center justify-between gap-x-8 lsm:gap-x-16'>
-                                    <div className='flex items-center text-xl transition-all lsm:gap-x-1 group-hover:-translate-x-2'>
-                                        {[...Array(5)].map((_, i) => (
-                                            <TiStarFullOutline key={i} className='transition-all group-hover:scale-110'/>
-                                        ))}
-                                    </div>
-
-
-                                    <div className='uppercase flex items-center justify-center font-onest text-[.9rem] lsm:text-[1rem] w-full bg-slate-300 text-slate-900 font-bold tracking-wide group-hover:translate-x-2 py-1 rounded-md transition-all max-w-[10rem]'>
-                                        {course.priceAll} / {course.pricePer}
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <a href={course.joinNowLink} className='no-underline '>
-                                <button className='flex items-center justify-center w-full py-2 mt-4 text-lg sm:text-xl font-bold tracking-wide text-white uppercase transition-all rounded-md font-onest bg-slate-700 group-hover:bg-slate-900 group-hover:translate-y-1'>
-                                    join now
-                                </button>
-                            </a>
-                        </div>
-                    ))}
-                </div> */}
-            </>
-
-            {/* best online courses */}
-            {/* <div className='flex flex-col items-center justify-center mt-10 gap-y-10'>
-                <div className='flex flex-col items-center space-y-3 '>
-                    <div className='text-[1.6rem] xl:text-[2rem] font-bold font-montserrat bg-gradient-to-br from-indigo-700 via-violet-700 to-blue-800 bg-clip-text text-transparent'>
-                        Courses
-                    </div>
-
-                    <div className='text-3xl font-bold text-center text-blue-900 xl:text-5xl font-montserrat'>
-                        Browse Our Best Online Courses
-                    </div>
-                </div>
-
-                <div className='grid md:grid-cols-2 Cxl:grid-cols-3 2xl:grid-cols-4 gap-14'>
-                    {onlineCourses.map((course, index) => (
-                        <div 
-                        className='group bg-gray-100 shadow-lg shadow-slate-900 hover:bg-slate-800 duration-200 flex flex-col items-center justify-center rounded-md overflow-hidden py-4 px-[4.3rem] cursor-pointer border border-slate-800'
-                        key={index}>
-                            <div className='w-[5rem] h-[5rem] group-hover:scale-105'>
-                                <img 
-                                    src={course.cover} 
-                                    className='w-full h-full duration-200 group-hover:hidden group-hover:scale-110 transition-all'
-                                    alt={course.course} 
-                                />
-
-                                <img 
-                                    src={course.hoverCover} 
-                                    className='hidden w-full h-full duration-200 group-hover:block group-hover:scale-110 transition-all'
-                                    alt={course.course} 
-                                />
-                            </div>
-
-                            <div className='flex flex-col items-center justify-center mt-7 gap-y-3'>
-                                <div className='text-xl font-bold duration-200 group-hover:text-cyan-300 font-robotoMono'>
-                                    {course.courseName}
-                                </div>
-
-                                <div className=' rounded-md px-3 py-1.5 bg-slate-200 group-hover:bg-slate-600 shadow-xl shadow-slate-70 font-bold group-hover:text-yellow-300 font-mavenPro tracking-wide duration-200'>
-                                    {course.course}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div> */}
 
             {/* cards */}
             <div className="w-full px-3 pb-5 mt-16">
@@ -449,8 +237,8 @@ export default StudentHome;
 
 
 
-const NavBar = () => {
-    const [selected, setSelected] = useState(tabs[0].text);
+export const NavBar = ({selectedTab }) => {
+    const [selected, setSelected] = useState(selectedTab);
     const [hamburgerActive, setHamburgerActive] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -489,6 +277,7 @@ const NavBar = () => {
                                     key={tab.text+indx}
                                     setIsDropdownOpen={setIsDropdownOpen}
                                     Icon={tab.icon}
+                                    
                                     text={tab.text}
                                     path={tab.path}
                                 />
@@ -705,8 +494,7 @@ const userActions = ({selectedArray}) => {
 
 
 
-const Footer = () => {
-    const navigate = useNavigate();
+export const Footer = () => {
 
     const iconArray = [
         {icon: <FaMeta/>, className: 'text-2xl text-blue-500', href: '#'},

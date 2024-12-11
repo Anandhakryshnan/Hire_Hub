@@ -466,7 +466,6 @@ export const footerLists = [
 
 export const tabs = [
   { text: "Home", icon: <TiHomeOutline />, path: "/" },
-  { text: "Courses", icon: <AiOutlineSchedule />, path: "/courses" },
   { text: "About Us", icon: <MdOutlineAccountCircle />, path: "/aboutus" },
   { text: "Our Team", icon: <RiTeamLine />, path: "/team" },
   { text: "Placement", icon: <IoBriefcaseOutline />, path: "/placement" },

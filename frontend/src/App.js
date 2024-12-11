@@ -61,7 +61,7 @@ import CHEngineer from './components/student/career counselling/field/ComputerHa
 import StructuralEngineer from './components/student/career counselling/field/StructuralEngineer'
 
 import AboutUs from './components/home/about/AboutUs';
-import Courses from './components/home/course/Courses';
+// import Courses from './components/home/course/Courses';
 import Team from './components/home/team/Team';
 import Placement from './components/home/placement/Placement';
 import ContactUs from './components/home/contactUs/ContactUs';
@@ -127,7 +127,7 @@ function App() {
           <Route path="/AdminJobPosting" element={<AdminJobPosting/>}/>   
           <Route path="/AdminPlacedStudent" element={<AdminPlacedStudent/>}/>
           <Route path="/aboutus" element={<AboutUs/>}/>
-          <Route path="/courses" element={<Courses />} />
+          {/* <Route path="/courses" element={<Courses />} /> */}
           <Route path="/team" element={<Team />} />
           <Route path="/placement" element={<Placement />} />
           <Route path="/contactus" element={<ContactUs />} />
