@@ -3,7 +3,7 @@ const cors = require('cors')
 const multer = require('multer');
 const app = express()
 const dotenv = require('dotenv')
-const { Student, Company, Posting, AppliedCandidate, Resume, ChatMessage, CompanyInterview, StudentInterview, Feedback, Admin, Template } = require('./models')
+const { Student, Company, Posting, AppliedCandidate, Resume, ChatMessage, CompanySchedule, StudentInterview, Feedback, Admin, Template } = require('./models')
 // const {Student, Company, Posting, AppliedCandidate, Admin} = require('./models')
 const email = require('./emailservice')
 const mongoose = require('mongoose')
@@ -76,7 +76,7 @@ app.post('/api/finalScheduleSelection', async (req, res) => {
     const jobId = req.body.did;
 
     try {
-      const result = await CompanyInterview.deleteOne({ _id: jobId });
+      const result = await CompanySchedule.deleteOne({ _id: jobId });
 
       if (result.deletedCount === 0) {
         return res.status(404).json({ message: 'Job posting not found' });
@@ -176,33 +176,42 @@ app.get('/api/companysechdule/:email', (req, res) => {
     });
 });
 
-app.post('/api/scheduleInterviewCompany', (req, res) => {
+app.post('/api/schedulePhases', async (req, res) => {
+  const { usn, companyEmail, phases } = req.body;
 
-  const { usn, companyEmail, meetingLink, schedule } = req.body;
+  try {
+    const errors = [];
 
-  const companyInterview = new CompanyInterview({
-    usn,
-    companyEmail,
-    meetingLink
-  });
-
-  // Process the schedule array dynamically
-  schedule.forEach((slot, index) => {
-    const dateField = `date${index + 1}`;
-    const timeField = `time${index + 1}`;
-    companyInterview[dateField] = slot.date;
-    companyInterview[timeField] = slot.time;
-  });
-
-  companyInterview.save()
-    .then(() => {
-      res.status(200).json({ message: 'Interview scheduled successfully' });
-    })
-    .catch((error) => {
-      console.log(error)
-      res.status(500).json({ error: 'Failed to schedule interview' });
+    // Validate each phase
+    phases.forEach((phase, index) => {
+      if (phase.mode === 'online' && !phase.meetingLink) {
+        errors.push(`Meeting link is required for phase ${index + 1} (online).`);
+      }
     });
+
+    if (errors.length > 0) {
+      return res.status(400).json({ message: 'Validation errors', errors });
+    }
+
+    const schedule = phases.map(phase => ({
+      phaseName: phase.phaseName,
+      mode: phase.mode,
+      meetingLink: phase.mode === 'online' ? phase.meetingLink : null,
+      slots: phase.slots,
+    }));
+
+    await CompanySchedule.create({
+      usn,
+      companyEmail,
+      schedule,
+    });
+
+    res.json({ message: 'Interview phases scheduled successfully!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error scheduling phases', error });
+  }
 });
+
 
 app.post('/api/sendMessage', (req, res) => {
   const { sender, message } = req.body;
@@ -604,19 +613,39 @@ app.post('/api/registerCompany', async (req, res) => {
   // res.status(206).send("ok")
 })
 
+// app.get('/api/inveriewSlotAvailability/:usn', async (req, res) => {
+//   const usn = req.params.usn;
+
+//   try {
+//       // Find the interview data in the MongoDB collection by USN
+//       const interviews = await CompanySchedule.find({ usn });
+
+//       if (!interviews || interviews.length === 0) {
+//           return res.status(404).json({ message: 'No interviews found for the given USN.' });
+//       }
+
+//       res.json(interviews);
+//   } catch (error) {
+//       console.error('Error fetching interview data:', error);
+//       res.status(500).json({ message: 'Failed to fetch interview data.' });
+//   }
+// });
+
 app.get('/api/inveriewSlotAvailability/:usn', async (req, res) => {
-  console.log(req.params.usn)
+  // console.log(req.params.usn)
   usn = req.params.usn;
   console.log(usn)
 
   // Find the interview data in the MongoDB collection by USN
-  CompanyInterview.find({ usn: usn })
+  const interviews = CompanySchedule.find({ usn: usn })
     .then((interview) => {
-      if (!interview) {
-        return res.status(404).json({ message: 'Interview not found' });
-      }
-
+      if (!interviews || interviews.length === 0) {
+        return res.status(404).json({ message: 'No interviews found for the given USN.' });
+    }
+      console.log(interview);
       res.json(interview);
+      
+      
     })
     .catch((error) => {
       console.error('Error fetching interview data', error);

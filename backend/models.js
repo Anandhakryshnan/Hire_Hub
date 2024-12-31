@@ -1,10 +1,9 @@
-const mongoose = require('mongoose');
-
+const mongoose = require("mongoose");
 
 const StudentSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String },
-  usn: { type: String, required: true,unique: true, },
+  usn: { type: String, required: true, unique: true },
   currentSemester: { type: Number, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
@@ -39,66 +38,61 @@ const StudentSchema = new mongoose.Schema({
   careerPreferences: { type: String },
 });
 
-
-
 const CompanySchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true
-    
+    unique: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   address: {
     type: String,
-    required: true
+    required: true,
   },
   website: {
-    type: String
+    type: String,
   },
   country: {
-    type: String
+    type: String,
   },
   state: {
-    type: String
+    type: String,
   },
   city: {
-    type: String
+    type: String,
   },
   zip: {
-    type: String
+    type: String,
   },
   companyLogo: {
-    type: String
+    type: String,
   },
   companyDescription: {
-    type: String
+    type: String,
   },
   contact: {
     email: {
       type: String,
-      required: true
+      required: true,
     },
     phone: {
       type: String,
-      required: true
-    }
-  }
+      required: true,
+    },
+  },
 });
 
 const ChatSchema = new mongoose.Schema({
   sender: String,
   message: String,
 });
-
-
 
 const JobPostingSchema = new mongoose.Schema({
   companyEmail: {
@@ -107,242 +101,262 @@ const JobPostingSchema = new mongoose.Schema({
   },
   jobRole: {
     type: String,
-    required: true
+    required: true,
   },
-  JobDescription : {
+  JobDescription: {
     type: String,
-    required: true
+    required: true,
   },
   Package: {
     type: String,
-    required: true
+    required: true,
   },
   Qualification: {
     type: String,
-    required: true
+    required: true,
   },
   Eligibility: {
     type: String,
-    required: true
+    required: true,
   },
   Specialization: {
     type: String,
-    required: true
+    required: true,
   },
   Experience: {
     type: String,
-    
   },
-  
+
   JobLocation: {
     type: String,
-    required: true
+    required: true,
   },
   LastDate: {
     type: Date,
-    required: true
+    required: true,
   },
   DriveFrom: {
     type: Date,
-    required: true
+    required: true,
   },
   DriveTO: {
     type: Date,
-    required: true
+    required: true,
   },
   Venue: {
     type: String,
-    required: true
+    required: true,
   },
-  Name:{
-    type:String,
-    required:true
-  },
-  Status:{
+  Name: {
     type: String,
-    enum: ['pending', 'accepted'],
-    default: 'pending'
-  }
-  
-
+    required: true,
+  },
+  Status: {
+    type: String,
+    enum: ["pending", "accepted"],
+    default: "pending",
+  },
 });
 
-const AppliedCandidateSchema = new mongoose.Schema({ 
-  usn:{
-    type:String,
-    required:true,
-    ref: 'Student'
-  },
-  jobid:{
-    type:String,
-    required:true,
-    ref: 'Posting'
-  },
-  status: {
-    type: String,
-    enum: ['pending', 'rejected', 'accepted'],
-    default: 'pending'
-  }
-
-})
-
-
-const CompanyInterviewSchema = new mongoose.Schema({
+const AppliedCandidateSchema = new mongoose.Schema({
   usn: {
     type: String,
     required: true,
-    ref: 'Student'
+    ref: "Student",
   },
-  companyEmail:{
-    type:String,
-    require:true
+  jobid: {
+    type: String,
+    required: true,
+    ref: "Posting",
   },
-  meetingLink:String,
-  date1:{
-    type:String,
-    default:"-"
-  },
-  time1:{
-    type:String,
-    default:"-"
-  },
-  date2:{
-    type:String,
-    default:"-"
-  },
-  time2:{
-    type:String,
-    default:"-"
-  },
-  date3:{
-    type:String,
-    default:"-"
-  },
-  time3:{
-    type:String,
-    default:"-"
-  },
-  date4:{
-    type:String,
-    default:"-"
-  },
-  time4:{
-    type:String,
-    default:"-"
-  },
-  date5:{
-    type:String,
-    default:"-"
-  },
-  time5:{
-    type:String,
-    default:"-"
+  status: {
+    type: String,
+    enum: ["pending", "rejected", "accepted"],
+    default: "pending",
   },
 });
 
-const StudentInterview = new mongoose.Schema({
-  usn:String,
-  meetingLink:String,
-  companyEmail:String,
-  date:String,
-  time:String
+const CompanyScheduleSchema = new mongoose.Schema({
+  usn: {
+    type: String,
+    required: true,
+    ref: "Student",
+  },
+  companyEmail: {
+    type: String,
+    required: true,
+  },
+  schedule: [
+    {
+      phaseName: String,
+      mode: String,
+      meetingLink: String, // Optional, only for online mode
+      slots: [
+        {
+          date: String,
+          time: String,
+        },
+      ],
+    },
+  ],
+});
 
-})
+// const CompanyInterviewSchema = new mongoose.Schema({
+//   usn: {
+//     type: String,
+//     required: true,
+//     ref: 'Student'
+//   },
+//   companyEmail:{
+//     type:String,
+//     require:true
+//   },
+//   meetingLink:String,
+//   date1:{
+//     type:String,
+//     default:"-"
+//   },
+//   time1:{
+//     type:String,
+//     default:"-"
+//   },
+//   date2:{
+//     type:String,
+//     default:"-"
+//   },
+//   time2:{
+//     type:String,
+//     default:"-"
+//   },
+//   date3:{
+//     type:String,
+//     default:"-"
+//   },
+//   time3:{
+//     type:String,
+//     default:"-"
+//   },
+//   date4:{
+//     type:String,
+//     default:"-"
+//   },
+//   time4:{
+//     type:String,
+//     default:"-"
+//   },
+//   date5:{
+//     type:String,
+//     default:"-"
+//   },
+//   time5:{
+//     type:String,
+//     default:"-"
+//   },
+// });
+
+const StudentInterview = new mongoose.Schema({
+  usn: String,
+  meetingLink: String,
+  companyEmail: String,
+  date: String,
+  time: String,
+});
 
 const FeedbackSchema = new mongoose.Schema({
   usn: {
     type: String,
     required: true,
-    
   },
-  company:{
-    type:String,
-    required:true
+  company: {
+    type: String,
+    required: true,
   },
-  title:{
-    type:String,
+  title: {
+    type: String,
   },
-  content:{
-    type:String
-  }
-
+  content: {
+    type: String,
+  },
 });
-
 
 const AdminSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
     required: true,
-    unique: true
-  }
+    unique: true,
+  },
 });
 
 const ResumeSchema = new mongoose.Schema({
   usn: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   resume: {
     data: Buffer,
     contentType: {
       type: String,
       required: true,
-      default: 'application/pdf'
-    }
-}
+      default: "application/pdf",
+    },
+  },
 });
 
 const ResumeFeedbackSchema = new mongoose.Schema({
   resumeId: {
     type: String,
     required: true,
-    ref: 'Resume'
+    ref: "Resume",
   },
   feedback: {
     type: [
       {
         company: {
           type: String,
-          required: true
+          required: true,
         },
         feedback: {
-          type: String
-        }
-      }
+          type: String,
+        },
+      },
     ],
-    default: []
-  }
+    default: [],
+  },
 });
 
 const ResumeTemplateSchema = new mongoose.Schema({
   downloadUrl: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
 // Export the models
 module.exports = {
-  Student: mongoose.model('student', StudentSchema),
-  Company: mongoose.model('company', CompanySchema),
-  Posting: mongoose.model('jobposting', JobPostingSchema),
-  Resume:mongoose.model('resume',ResumeSchema),
-  ResumeFeedback : mongoose.model('resumefeedback', ResumeFeedbackSchema),
-  AppliedCandidate: mongoose.model('appliedCandidateSchema',AppliedCandidateSchema),
-  CompanyInterview:mongoose.model('cmpanyInterview',CompanyInterviewSchema),
-  StudentInterview:mongoose.model('studentIntervew',StudentInterview),
-  Admin: mongoose.model('admin',AdminSchema),
-  Template: mongoose.model('template',ResumeTemplateSchema),
-  Feedback : mongoose.model('feedback', FeedbackSchema),
-  ChatMessage:mongoose.model('ChatMessage', ChatSchema)
+  Student: mongoose.model("student", StudentSchema),
+  Company: mongoose.model("company", CompanySchema),
+  Posting: mongoose.model("jobposting", JobPostingSchema),
+  Resume: mongoose.model("resume", ResumeSchema),
+  ResumeFeedback: mongoose.model("resumefeedback", ResumeFeedbackSchema),
+  AppliedCandidate: mongoose.model(
+    "appliedCandidateSchema",
+    AppliedCandidateSchema
+  ),
+  // CompanyInterview:mongoose.model('cmpanyInterview',CompanyInterviewSchema),
+  CompanySchedule: mongoose.model("CompanySchedule", CompanyScheduleSchema),
+  StudentInterview: mongoose.model("studentIntervew", StudentInterview),
+  Admin: mongoose.model("admin", AdminSchema),
+  Template: mongoose.model("template", ResumeTemplateSchema),
+  Feedback: mongoose.model("feedback", FeedbackSchema),
+  ChatMessage: mongoose.model("ChatMessage", ChatSchema),
 };
