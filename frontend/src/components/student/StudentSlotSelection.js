@@ -1,36 +1,47 @@
-
-import React, { Component, useState, useEffect } from 'react';
-import { Navbar, Container, Nav, Form, Button, Card, Table,Dropdown } from 'react-bootstrap'
+import React, { useState, useEffect } from 'react';
+import { Navbar, Container, Nav, Form, Button, Table, DropdownButton, Dropdown } from 'react-bootstrap';
 
 const StudentSlotSelection = () => {
-
     const [interviews, setInterviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [disableButtons, setDisableButtons] = useState({});
-    const usn = localStorage.getItem('token')
+    const [selectedSlots, setSelectedSlots] = useState({});
+    const usn = localStorage.getItem('token');
+
     useEffect(() => {
         // Fetch interview data from the backend API
-        fetch(`http://localhost:9000/api/inveriewSlotAvailability/${localStorage.getItem('token')}`)
+        fetch(`http://localhost:9000/api/inveriewSlotAvailability/${usn}`)
             .then((response) => response.json())
             .then((data) => {
                 setInterviews(data);
-                console.log(data)
                 setLoading(false);
             })
             .catch((error) => {
                 console.error('Failed to fetch interview data', error);
                 setLoading(false);
             });
-    }, []);
+    }, [usn]);
 
-    const handleApplyClick = (id, did, date, time, companyEmail, meetingLink) => {
+    const handleSlotSelection = (interviewId, slotDetails) => {
+        setSelectedSlots((prevState) => ({
+            ...prevState,
+            [interviewId]: slotDetails,
+        }));
+    };
+
+    const handleApplyClick = (id) => {
+        const selectedSlot = selectedSlots[id];
+        if (!selectedSlot) {
+            alert('Please select a slot before applying.');
+            return;
+        }
+
+        const { date, time, meetingLink, companyEmail, phaseName } = selectedSlot;
+
         setDisableButtons((prevState) => ({
             ...prevState,
             [id]: true,
         }));
-        console.log(did)
-
-
 
         fetch('http://localhost:9000/api/finalScheduleSelection', {
             method: 'POST',
@@ -38,18 +49,17 @@ const StudentSlotSelection = () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                did,
+                usn,
                 date,
                 time,
-                usn,
                 meetingLink,
-                companyEmail
+                companyEmail,
+                phaseName,
             }),
         })
             .then((response) => response.json())
             .then((responseData) => {
-                // Handle the response from the backend
-                console.log(responseData);
+                console.log('Response:', responseData);
             })
             .catch((error) => {
                 console.error('Failed to send the data', error);
@@ -58,159 +68,110 @@ const StudentSlotSelection = () => {
 
     return (
         <div>
-             <Navbar bg="dark" variant='dark' expand="lg">
+            <Navbar bg="dark" variant="dark" expand="lg">
                 <Container fluid>
-                    <img src="https://www.igauge.in/admin/uploaded/rating/logo/CambridgeInstituteLatestLogo2_1623754797.png" height="40" width="110" />
+                    <img src="https://www.igauge.in/admin/uploaded/rating/logo/CambridgeInstituteLatestLogo2_1623754797.png" height="40" width="110" alt="Logo" />
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
-                        <Nav
-                            className="me-auto my-1 my-lg-0"
-                            style={{ maxHeight: '100px' }}
-                            navbarScroll
-                        >
+                        <Nav className="me-auto" navbarScroll>
                             <Nav.Link href="StudentHome">Home</Nav.Link>
                             <Nav.Link href="StudentSchedule">Schedule</Nav.Link>
                             <Nav.Link href="createResume">Resume</Nav.Link>
                         </Nav>
-
-
-                        <div className="col-md-6 mx-auto" >
-                            <Form className="d-flex ">
-                                <Form.Control
-                                    type="search"
-                                    placeholder="Search"
-                                    className="me-2"
-                                    aria-label="Search"
-                                />
-                                <Button variant="outline-light">Search</Button>
-                            </Form>
-                        </div>
-                        <Dropdown className="me-auto my-1 my-lg-0">
+                        <Form className="d-flex">
+                            <Form.Control
+                                type="search"
+                                placeholder="Search"
+                                className="me-2"
+                                aria-label="Search"
+                            />
+                            <Button variant="outline-light">Search</Button>
+                        </Form>
+                        <Dropdown>
                             <Dropdown.Toggle variant="outline-secondary" id="dropdown-Login">
-                            <img className="me-auto my-1 my-lg-0" src="https://icon-library.com/images/my-profile-icon-png/my-profile-icon-png-22.jpg" height="30" width="30" />
-
+                                <img src="https://icon-library.com/images/my-profile-icon-png/my-profile-icon-png-22.jpg" height="30" width="30" alt="Profile" />
                             </Dropdown.Toggle>
-
                             <Dropdown.Menu>
                                 <Dropdown.Item href="/">Log Out</Dropdown.Item>
-                                
                             </Dropdown.Menu>
                         </Dropdown>
-
-
-
                     </Navbar.Collapse>
                 </Container>
-            
             </Navbar>
-            <br></br>
-            <br></br>
-            <h1 class="container text-center">Slot Sletection</h1>
-            <br></br>
-            <br></br>
-            <div class="container ">
-                {interviews?.map((posting) =>
-                    <Table striped bordered hover key={posting.id}>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Company Email</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {posting.date1 !== '-' && (
+            <Container className="mt-4">
+                <h1 className="text-center">Slot Selection</h1>
+                {loading ? (
+                    <p>Loading...</p>
+                ) : (
+                    interviews.map((interview, index) => (
+                        <Table striped bordered hover key={index} className="mt-4">
+                            <thead>
                                 <tr>
-                                    <td>{posting.date1}</td>
-                                    <td>{posting.time1}</td>
-                                    <td>{posting.companyEmail}</td>
+                                    <th>Company Email</th>
+                                    <th>Phase Name</th>
+                                    <th>Mode</th>
+                                    <th>Meeting Link</th>
+                                    <th>Slot Selection</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{interview.companyEmail}</td>
+                                    <td>{interview.schedule[0]?.phaseName || 'N/A'}</td>
+                                    <td>{interview.schedule[0]?.mode || 'N/A'}</td>
+                                    <td>
+                                        {interview.schedule[0]?.mode === 'online' ? (
+                                            <a href={interview.schedule[0]?.meetingLink} target="_blank" rel="noopener noreferrer">
+                                                {interview.schedule[0]?.meetingLink || 'N/A'}
+                                            </a>
+                                        ) : (
+                                            'Offline'
+                                        )}
+                                    </td>
+                                    <td>
+                                        <DropdownButton
+                                            id={`dropdown-${index}`}
+                                            title={
+                                                selectedSlots[interview._id]?.date
+                                                    ? `${selectedSlots[interview._id].date} - ${selectedSlots[interview._id].time}`
+                                                    : 'Select a Slot'
+                                            }
+                                            onSelect={(eventKey) => {
+                                                const [date, time] = eventKey.split('|');
+                                                handleSlotSelection(interview._id, {
+                                                    date,
+                                                    time,
+                                                    meetingLink: interview.schedule[0]?.meetingLink,
+                                                    companyEmail: interview.companyEmail,
+                                                    phaseName: interview.schedule[0]?.phaseName,
+                                                });
+                                            }}
+                                        >
+                                            {interview.schedule[0]?.slots.map((slot, slotIndex) => (
+                                                <Dropdown.Item key={slotIndex} eventKey={`${slot.date}|${slot.time}`}>
+                                                    {slot.date} - {slot.time}
+                                                </Dropdown.Item>
+                                            ))}
+                                        </DropdownButton>
+                                    </td>
                                     <td>
                                         <Button
                                             variant="dark"
-                                            disabled={disableButtons[posting.id]}
-                                            onClick={() => handleApplyClick(posting.id, posting._id, posting.date1, posting.time1, posting.companyEmail, posting.meetingLink)}
+                                            disabled={disableButtons[interview._id]}
+                                            onClick={() => handleApplyClick(interview._id)}
                                         >
                                             Apply
                                         </Button>
                                     </td>
                                 </tr>
-                            )}
-                            {posting.date2 !== '-' && (
-                                <tr>
-                                    <td>{posting.date2}</td>
-                                    <td>{posting.time2}</td>
-                                    <td>{posting.companyEmail}</td>
-                                    <td>
-                                        <Button
-                                            variant="dark"
-                                            disabled={disableButtons[posting.id]}
-                                            onClick={() => handleApplyClick(posting.id, posting._id, posting.date1, posting.time1, posting.companyEmail, posting.meetingLink)}
-                                        >
-                                            Apply
-                                        </Button>
-                                    </td>
-                                </tr>
-                            )}
-                            {posting.date3 !== '-' && (
-                                <tr>
-                                    <td>{posting.date3}</td>
-                                    <td>{posting.time3}</td>
-                                    <td>{posting.companyEmail}</td>
-                                    <td>
-                                        <Button
-                                            variant="dark"
-                                            disabled={disableButtons[posting.id]}
-                                            onClick={() => handleApplyClick(posting.id, posting._id, posting.date1, posting.time1, posting.companyEmail, posting.meetingLink)}
-                                        >
-                                            Apply
-                                        </Button>
-                                    </td>
-                                </tr>
-                            )}
-                            {posting.date4 !== '-' && (
-                                <tr>
-                                    <td>{posting.date4}</td>
-                                    <td>{posting.time4}</td>
-                                    <td>{posting.companyEmail}</td>
-                                    <td>
-                                        <Button
-                                            variant="dark"
-                                            disabled={disableButtons[posting.id]}
-                                            onClick={() => handleApplyClick(posting.id, posting._id, posting.date1, posting.time1, posting.companyEmail, posting.meetingLink)}
-                                        >
-                                            Apply
-                                        </Button>
-                                    </td>
-                                </tr>
-                            )}
-                            {posting.date5 !== '-' && (
-                                <tr>
-                                    <td>{posting.date5}</td>
-                                    <td>{posting.time5}</td>
-                                    <td>{posting.companyEmail}</td>
-                                    <td>
-                                        <Button
-                                            variant="dark"
-                                            disabled={disableButtons[posting.id]}
-                                            onClick={() => handleApplyClick(posting.id, posting._id, posting.date1, posting.time1, posting.companyEmail, posting.meetingLink)}
-                                        >
-                                            Apply
-                                        </Button>
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </Table>
+                            </tbody>
+                        </Table>
+                    ))
                 )}
-            </div>
-            <br></br>
-            <br></br>
-            <br></br>
-
-
+            </Container>
         </div>
     );
-}
+};
 
 export default StudentSlotSelection;
