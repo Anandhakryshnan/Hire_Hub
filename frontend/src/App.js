@@ -4,7 +4,7 @@ import React from "react";
 import Home from './components/home/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// import TrainingCompLogin from './components/login/TrainingCompLogin';
+import TrainingCompLogin from './components/login/TrainingCompLogin';
 
 import CompanyLogIn from './components/login/CompanyLogIn';
 import CompanyRegister from './components/register/CompanyRegister'
@@ -95,7 +95,7 @@ function App() {
           <Route path='/admin/home' element={<AdminHome />} />
           <Route path='/StudentHome' element={<StudentHome />} />
           <Route path='/CompanyLogIn' element={<CompanyLogIn />} />
-          {/* <Route path='/TrainingCompLogin' element={<TrainingCompLogin />} /> */}
+          <Route path='/TrainingCompLogin' element={<TrainingCompLogin />} />
           <Route path='/StudentLogin' element={<StudentLogIn />} />
           <Route path='/StudentRegister' element={<StudentRegister />} />
           <Route path='/CompanyRegister' element={<CompanyRegister />} />
