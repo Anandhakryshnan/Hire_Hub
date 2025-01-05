@@ -251,7 +251,9 @@ export const NavBar = ({selectedTab }) => {
     const registerOptions = [
         { href: '/StudentRegister', text: 'Student Register', icon: <PiStudentDuotone/> },
         { href: '/CompanyRegister', text: 'Company Register', icon: <MdOutlineAdminPanelSettings/> },
-        { href: '/AdminRegister', text: 'Admin Register', icon: <FaBuildingUser/> }
+        { href: '/AdminRegister', text: 'Admin Register', icon: <FaBuildingUser/> },
+        { href: '/TreningRegister', text: 'Trening Register', icon: <MdOutlineAdminPanelSettings/> }
+
     ];
 
     return (

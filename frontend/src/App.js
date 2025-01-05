@@ -4,8 +4,11 @@ import React from "react";
 import Home from './components/home/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import CompanyLogin from './components/login/CompanyLogIn';
+// import TrainingCompLogin from './components/login/TrainingCompLogin';
+
+import CompanyLogIn from './components/login/CompanyLogIn';
 import CompanyRegister from './components/register/CompanyRegister'
+import TreningRegister from './components/register/TreningRegister';
 import CompanyHome from './components/company/CompanyHome';
 import CompanyJobPosting from './components/company/CompanyJobPosting';
 import ViewCandidateResume from './components/ResumeViewCompany'
@@ -91,10 +94,12 @@ function App() {
           <Route path='/Home' element={<Home />} />
           <Route path='/admin/home' element={<AdminHome />} />
           <Route path='/StudentHome' element={<StudentHome />} />
-          <Route path='/CompanyLogIn' element={<CompanyLogin />} />
+          <Route path='/CompanyLogIn' element={<CompanyLogIn />} />
+          {/* <Route path='/TrainingCompLogin' element={<TrainingCompLogin />} /> */}
           <Route path='/StudentLogin' element={<StudentLogIn />} />
           <Route path='/StudentRegister' element={<StudentRegister />} />
           <Route path='/CompanyRegister' element={<CompanyRegister />} />
+          <Route path='/TreningRegister' element={<TreningRegister />} />
           <Route path='/AdminLogIn' element={<AdminLogin />} />
           <Route path='/AdminRegister' element={<AdminRegister />} />
           <Route path='/CompanyHome' element={<CompanyHome />} />

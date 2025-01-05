@@ -89,6 +89,57 @@ const CompanySchema = new mongoose.Schema({
   },
 });
 
+const TrainigCompSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  website: {
+    type: String,
+  },
+  country: {
+    type: String,
+  },
+  state: {
+    type: String,
+  },
+  city: {
+    type: String,
+  },
+  zip: {
+    type: String,
+  },
+  companyLogo: {
+    type: String,
+  },
+  companyDescription: {
+    type: String,
+  },
+  contact: {
+    email: {
+      type: String,
+      required: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
+  },
+});
+
 const ChatSchema = new mongoose.Schema({
   sender: String,
   message: String,
@@ -260,6 +311,7 @@ const StudentInterview = new mongoose.Schema({
   companyEmail: String,
   date: String,
   time: String,
+  phaseName: String,
 });
 
 const FeedbackSchema = new mongoose.Schema({
@@ -345,6 +397,7 @@ const ResumeTemplateSchema = new mongoose.Schema({
 module.exports = {
   Student: mongoose.model("student", StudentSchema),
   Company: mongoose.model("company", CompanySchema),
+  TrainigComp: mongoose.model("trainigcomp", TrainigCompSchema),
   Posting: mongoose.model("jobposting", JobPostingSchema),
   Resume: mongoose.model("resume", ResumeSchema),
   ResumeFeedback: mongoose.model("resumefeedback", ResumeFeedbackSchema),

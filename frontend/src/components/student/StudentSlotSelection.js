@@ -35,7 +35,8 @@ const StudentSlotSelection = () => {
             alert('Please select a slot before applying.');
             return;
         }
-
+        console.log(selectedSlot );
+        
         const { date, time, meetingLink, companyEmail, phaseName } = selectedSlot;
 
         setDisableButtons((prevState) => ({
@@ -49,6 +50,7 @@ const StudentSlotSelection = () => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
+                id,
                 usn,
                 date,
                 time,

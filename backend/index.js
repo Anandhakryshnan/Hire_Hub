@@ -3,7 +3,7 @@ const cors = require('cors')
 const multer = require('multer');
 const app = express()
 const dotenv = require('dotenv')
-const { Student, Company, Posting, AppliedCandidate, Resume, ChatMessage, CompanySchedule, StudentInterview, Feedback, Admin, Template } = require('./models')
+const { Student, Company, Posting, AppliedCandidate, Resume, ChatMessage, CompanySchedule, StudentInterview, Feedback, Admin, Template, TrainigComp } = require('./models')
 // const {Student, Company, Posting, AppliedCandidate, Admin} = require('./models')
 const email = require('./emailservice')
 const mongoose = require('mongoose')
@@ -69,11 +69,12 @@ app.post('/api/finalScheduleSelection', async (req, res) => {
     companyEmail: req.body.companyEmail,
     date: req.body.date,
     time: req.body.time,
+    phaseName: req.body.phaseName,
   });
 
   try {
     await studentInterview.save();
-    const jobId = req.body.did;
+    const jobId = req.body.id;
 
     try {
       const result = await CompanySchedule.deleteOne({ _id: jobId });
@@ -613,6 +614,41 @@ app.post('/api/registerCompany', async (req, res) => {
   // res.status(206).send("ok")
 })
 
+
+app.post('/api/registerTraining', async (req, res) => {
+
+  console.log(req.body);
+  try {
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(req.body.password, salt)
+
+    const newtrainig = await TrainigComp.create({
+
+      name: req.body.companyName,
+      email: req.body.email,
+      password: hashedPassword,
+      address: req.body.address,
+      website: req.body.companyWebsite,
+      contact: {
+        email: req.body.email,
+        phone: req.body.contactNumber
+
+      }
+
+
+    })
+
+    const company = await newtrainig.save()
+
+
+    res.status(201).json({ message: 'ok' });
+  } catch (err) {
+    console.log(err);
+  }
+
+  // res.status(206).send("ok")
+})
+
 // app.get('/api/inveriewSlotAvailability/:usn', async (req, res) => {
 //   const usn = req.params.usn;
 
@@ -658,6 +694,31 @@ app.post('/api/companyLogin', async (req, res) => {
   console.log(req.body)
   try {
     const company = await Company.findOne({ email: req.body.email })
+    // !company && res.status(404).json("Company not found")
+    !company && res.status(404).json({ status: 'Company not found' })
+
+    const validPassword = await bcrypt.compare(req.body.password, company.password)
+    !validPassword && res.status(400).json("invalid password")
+
+    const token = jwt.sign(
+      {
+        name: company.name,
+        email: req.body.email,
+      },
+      'secret123'
+    )
+
+    res.status(200).json({ status: 'ok', user: req.body.email, name: company.name, id: company._id })
+  } catch (err) {
+    console.log(err);
+  }
+})
+
+
+app.post('/api/trainingCompanyLogin', async (req, res) => {
+  console.log(req.body)
+  try {
+    const company = await TrainigComp.findOne({ email: req.body.email })
     // !company && res.status(404).json("Company not found")
     !company && res.status(404).json({ status: 'Company not found' })
 
@@ -910,6 +971,10 @@ app.post('/api/registerAdmin', async (req, res) => {
   }
 
 })
+
+
+
+
 app.post('/api/adminLogin', async (req, res) => {
   console.log(req.body)
   const { email, password } = req.body;
@@ -941,7 +1006,7 @@ app.post('/api/adminLogin', async (req, res) => {
 
 //resume feedback
 
-app.post('/api/ Upload', async (req, res) => {
+app.post('/api/Upload', async (req, res) => {
   const { usn, resumeData } = req.body;
 
   try {
