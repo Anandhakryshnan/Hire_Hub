@@ -5,6 +5,10 @@ import Home from './components/home/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import TrainingCompLogin from './components/login/TrainingCompLogin';
+import TrainingCompanyDashboard from './components/company/TrainingCompanyDashboard';
+import AllPrograms from './components/student/academics/AllPrograms';
+import AdminTrainingProgs from './components/admin/AdminTrainingProgs';
+import MaterialUpload from './components/company/MaterialUpload';
 
 import CompanyLogIn from './components/login/CompanyLogIn';
 import CompanyRegister from './components/register/CompanyRegister'
@@ -85,6 +89,10 @@ function App() {
           <Route path='/CoverLetter' element={<CoverLetter />} />
           <Route path='/Resume' element={<Resume />} />
           <Route path='/admin/companies' element={<AdminCompany />} />
+
+          <Route path='/admin/trainingPrograms' element={<AdminTrainingProgs />} />
+
+
           <Route path='/admin/jobPosting' element={<AdminJobPosting />} />
           <Route path='/admin/students' element={<AdminStudent />} />
           <Route path='/admin/studentapplied' element={<AdminStudentApplied />} />
@@ -103,6 +111,11 @@ function App() {
           <Route path='/AdminLogIn' element={<AdminLogin />} />
           <Route path='/AdminRegister' element={<AdminRegister />} />
           <Route path='/CompanyHome' element={<CompanyHome />} />
+          <Route path='/trainingHome' element={<TrainingCompanyDashboard />} />
+
+          <Route path='/AllPrograms' element={<AllPrograms />} />
+          <Route path='/material-upload/:programId' element={<MaterialUpload />} />
+
           <Route path='/StudentProfile' element={<StudentProfile />} />
           <Route path='/EditStudentProfile' element={<EditStudentProfile />} />
           <Route path='/chat' element={<ChatPage />} />

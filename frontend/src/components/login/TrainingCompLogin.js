@@ -27,9 +27,9 @@ const TrainingCompLogin  = () => {
             console.log(response)
             const data = await response.json();
             if (data.status === 'ok') {
-                localStorage.setItem('token', data.user);
+                localStorage.setItem('token', data.id);
                 localStorage.setItem('name', data.name);
-                navigate('/CompanyHome', { replace: true });
+                navigate('/trainingHome', { replace: true });
             } else {
                 console.error('Login failed');
             }

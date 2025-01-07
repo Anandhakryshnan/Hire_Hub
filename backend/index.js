@@ -3,7 +3,7 @@ const cors = require('cors')
 const multer = require('multer');
 const app = express()
 const dotenv = require('dotenv')
-const { Student, Company, Posting, AppliedCandidate, Resume, ChatMessage, CompanySchedule, StudentInterview, Feedback, Admin, Template, TrainigComp } = require('./models')
+const { Student, Company, Posting, AppliedCandidate, Resume, ChatMessage, CompanySchedule, StudentInterview, Feedback, Admin, Template, TrainigComp, TrainingProgram, Application, Material } = require('./models')
 // const {Student, Company, Posting, AppliedCandidate, Admin} = require('./models')
 const email = require('./emailservice')
 const mongoose = require('mongoose')
@@ -11,6 +11,7 @@ const bcrypt = require('bcrypt')
 const studentProfileModel = require('./studentprofile')
 const jwt = require('jsonwebtoken')
 const axios = require('axios')
+const path = require('path');
 dotenv.config()
 main().catch(err => console.log(err));
 
@@ -19,9 +20,189 @@ async function main() {
   console.log("Connection open");
   // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
 }
+
+// Configure storage engine for multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
 app.use(cors())
 app.use(express.json())
-const upload = multer();
+const upload = multer({ storage });
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+
+// Endpoint to handle multiple file uploads by the training company
+app.post('/upload-materials/:trainingId', upload.array('files'), async (req, res) => {
+  const { trainingId } = req.params;
+  const { companyId } = req.body; // Assume the company is sending their ID to verify ownership
+  
+
+  // Verify the company owns the program
+  const program = await TrainingProgram.findOne({ _id: trainingId, companyId });
+  
+  if (!program) {
+    return res.status(403).send('You are not authorized to upload materials for this program.');
+  }
+
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).send('No files uploaded.');
+  }
+
+  // Save the uploaded materials
+  const fileDetails = req.files.map(file => ({
+    trainingProgramId: trainingId,
+    filename: file.filename,
+    path: file.path,
+    size: file.size,
+  }));
+
+  try {
+    await Material.insertMany(fileDetails); // Save the materials in the database
+    res.status(200).json({ success: "Files uploaded successfully", uploadedFiles: fileDetails });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error saving files.');
+  }
+});
+
+app.post('/api/trainingPrograms', async (req, res) => {
+  const { companyId, title, description, venue, date, time } = req.body;
+  const newProgram = new TrainingProgram({
+      companyId,
+      title,
+      description,
+      venue,
+      date,
+      time,
+      isApproved: false,
+  });
+  await newProgram.save();  
+  res.status(201).json({ message: 'Program submitted for approval.' });
+});
+
+
+app.put('/api/trainingPrograms/:id/approve', async (req, res) => {
+  const { id } = req.params;
+  await TrainingProgram.findByIdAndUpdate(id, { isApproved: true });
+  res.json({ message: 'Program approved.' });
+});
+
+app.put('/api/trainingPrograms/:id/reject', async (req, res) => {
+  const { id } = req.params;
+  await TrainingProgram.findByIdAndUpdate(id, { isApproved: false });
+  res.json({ message: 'Program approved.' });
+});
+
+app.get('/api/trainingPrograms/approved', async (req, res) => {
+  const programs = await TrainingProgram.find({ isApproved: true });
+  res.json(programs);
+});
+
+
+app.post('/api/trainingPrograms/:id/apply', async (req, res) => {
+  const { id } = req.params;
+  const { studentId } = req.body;
+  const newApplication = new Application({ trainingId: id, studentId });
+  await newApplication.save();
+  res.status(201).json({ message: 'Applied successfully.' });
+});
+
+
+// Fetch pending training programs
+app.get('/api/trainingPrograms/pending', async (req, res) => {
+  try {
+    const pendingPrograms = await TrainingProgram.find({ isApproved: 'false' });
+    
+    res.json(pendingPrograms);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching pending programs' });
+  }
+});
+
+// Fetch all training programs
+app.get('/api/trainingPrograms', async (req, res) => {
+  try {
+    const programs = await TrainingProgram.find();
+    res.json(programs);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching programs', err });
+  }
+});
+
+// Fetch applied students
+app.get('/api/appliedStudents', async (req, res) => {
+  try {
+    const appliedStudents = await Application.find();
+    
+    res.json(appliedStudents);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching applied students', err });
+  }
+});
+
+// Fetch approved training programs
+app.get('/api/trainingPrograms/approved', async (req, res) => {
+  try {
+    const approvedPrograms = await TrainingProgram.find({ isApproved: 'true' });
+    res.json(approvedPrograms);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching approved programs' });
+  }
+});
+
+// Endpoint to get materials for a specific training program that the student has applied to
+app.get('/api/materials/:programId', async (req, res) => {
+  const { programId } = req.params;
+  const { studentId } = req.query; // Get the studentId from the query parameters (e.g., logged-in user)
+
+  // Find the student's application for this program
+  const application = await Application.findOne({ studentId, trainingId: programId });
+  
+  if (!application) {
+    return res.status(403).send('You have not applied for this program.');
+  }
+
+  // Fetch the materials associated with the training program
+  const materials = await Material.find({ trainingProgramId: programId });
+
+  if (materials.length === 0) {
+    return res.status(404).send('No materials found for this program.');
+  }
+
+  // Add a download link to each material
+  const materialsWithLinks = materials.map((material) => ({
+    ...material.toObject(),
+    downloadLink: `${req.protocol}://${req.get('host')}/uploads/${material.filename}`, // Adjust the path as needed
+  }));
+
+  res.status(200).json(materialsWithLinks);
+});
+
+// Get applied programs for a student
+app.get('/api/students/:studentId/appliedPrograms', async (req, res) => {
+  try {
+    // Find all applications by student
+    const applications = await Application.find({ studentId: req.params.studentId })
+      .populate('trainingId', 'title description date time venue') // Populate program details
+      .exec();
+
+    // Extract the program details
+    const appliedPrograms = applications.map(application => application.trainingId);
+    
+    res.json(appliedPrograms);
+  } catch (error) {
+    console.error('Error fetching applied programs:', error);
+    res.status(500).send('Server Error');
+  }
+});
+
+
 
 app.get('/api/studentProfile', async (req, res) => {
 

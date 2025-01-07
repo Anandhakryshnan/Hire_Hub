@@ -178,6 +178,16 @@ export const buttonsData = [
     link: "/ALLJobRole",
   },
   {
+    imgSrc: company,
+    alt: "Training Programs",
+    text: "Discover training programs. Explore descriptions. Apply to exciting programs.",
+    bgColor:
+      "bg-[#FFB293] bg-opacity-40 border-2 border-orange-300 hover:shadow-[#FFB293]",
+    textColor: "text-[#FF4800]",
+    titleColor: "text-[#AC3100]",
+    link: "/AllPrograms",
+  },
+  {
     imgSrc: schedule,
     alt: "Schedule",
     text: "Effortlessly manage appointments and deadlines. Organize tasks and set reminders for productivity.",

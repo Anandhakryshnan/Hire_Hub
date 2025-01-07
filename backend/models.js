@@ -1,5 +1,83 @@
 const mongoose = require("mongoose");
 
+const trainingProgramSchema = new mongoose.Schema({
+  companyId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'trainigcomp', // Assuming you have a Company model for storing company info
+    required: true,
+  },
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  venue: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    required: true,
+  },
+  time: {
+    type: String, // You can modify this type to store time in a more specific format if needed
+    required: true,
+  },
+  isApproved: {
+    type: Boolean,
+    default: false,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+
+const applicationSchema = new mongoose.Schema({
+  trainingId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'TrainingProgram', // Reference to the TrainingProgram schema
+    required: true,
+  },
+  studentId: {
+    type: String,
+    ref: 'Student', // Assuming you have a Student model for storing student details
+    required: true,
+  },
+  appliedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const materialSchema = new mongoose.Schema({
+  trainingProgramId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'TrainingProgram', // The training program to which these materials belong
+    required: true,
+  },
+  filename: {
+    type: String,
+    required: true,
+  },
+  path: {
+    type: String,
+    required: true,
+  },
+  size: {
+    type: Number,
+    required: true,
+  },
+  uploadedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
 const StudentSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String },
@@ -395,6 +473,9 @@ const ResumeTemplateSchema = new mongoose.Schema({
 
 // Export the models
 module.exports = {
+  TrainingProgram: mongoose.model('TrainingProgram', trainingProgramSchema),
+  Application: mongoose.model('Application', applicationSchema),
+  Material: mongoose.model('Material', materialSchema),
   Student: mongoose.model("student", StudentSchema),
   Company: mongoose.model("company", CompanySchema),
   TrainigComp: mongoose.model("trainigcomp", TrainigCompSchema),

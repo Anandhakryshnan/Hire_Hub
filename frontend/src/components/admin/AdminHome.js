@@ -18,6 +18,11 @@ const AdminHome = () => {
             title: 'Companies'
         },
         {
+            href: '/admin/trainingPrograms',
+            imgSrc: 'https://graphicsfamily.com/wp-content/uploads/edd/2020/04/Realstate-and-construction-logo.jpg',
+            title: 'Training Programs'
+        },
+        {
             href: '/admin/jobPosting',
             imgSrc: 'https://mir-s3-cdn-cf.behance.net/projects/404/8d92c7165061245.Y3JvcCwxNTAxLDExNzQsMCwxNTY.jpg',
             title: 'Job Posted'
