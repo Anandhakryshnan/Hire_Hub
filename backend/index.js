@@ -72,13 +72,14 @@ app.post('/upload-materials/:trainingId', upload.array('files'), async (req, res
 });
 
 app.post('/api/trainingPrograms', async (req, res) => {
-  const { companyId, title, description, venue, date, time } = req.body;
+  const { companyId, title, description, venue, fromDate, toDate,  time } = req.body;
   const newProgram = new TrainingProgram({
       companyId,
       title,
       description,
       venue,
-      date,
+      fromDate,
+      toDate,
       time,
       isApproved: false,
   });
@@ -127,8 +128,10 @@ app.get('/api/trainingPrograms/pending', async (req, res) => {
 
 // Fetch all training programs
 app.get('/api/trainingPrograms', async (req, res) => {
+  
+  const { companyId } = req.query;
   try {
-    const programs = await TrainingProgram.find();
+    const programs = await TrainingProgram.find({companyId});    
     res.json(programs);
   } catch (err) {
     res.status(500).json({ error: 'Error fetching programs', err });
@@ -136,9 +139,11 @@ app.get('/api/trainingPrograms', async (req, res) => {
 });
 
 // Fetch applied students
-app.get('/api/appliedStudents', async (req, res) => {
+app.get('/api/appliedStudents', async (req, res) => {  
+  const { programId } = req.query;
+  
   try {
-    const appliedStudents = await Application.find();
+    const appliedStudents = await Application.find({trainingId: programId});
     
     res.json(appliedStudents);
   } catch (err) {

@@ -18,7 +18,11 @@ const trainingProgramSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  date: {
+  fromDate: {
+    type: Date,
+    required: true,
+  },
+  toDate: {
     type: Date,
     required: true,
   },
@@ -35,6 +39,7 @@ const trainingProgramSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
 
 
 const applicationSchema = new mongoose.Schema({
@@ -83,6 +88,25 @@ const StudentSchema = new mongoose.Schema({
   lastName: { type: String },
   usn: { type: String, required: true, unique: true },
   currentSemester: { type: Number, required: true },
+  department: { 
+    type: String, 
+    required: true, 
+    enum: [
+      "ELECTRICAL AND ELECTRONICS ENGINEERING",
+      "COMPUTER SCIENCE AND ENGINEERING",
+      "INFORMATION TECHNOLOGY",
+      "MECHANICAL ENGINEERING",
+      "ELECTRONICS AND COMMUNICATION ENGINEERING",
+    ],
+  },
+  collegeName: { 
+    type: String, 
+    required: true, 
+    enum: [
+      "Government engineering college idukki",
+      "other",
+    ],
+  },
   email: { type: String, required: true },
   password: { type: String, required: true },
   dateOfBirth: { type: String },
@@ -105,13 +129,7 @@ const StudentSchema = new mongoose.Schema({
   address2: { type: String },
   score2: { type: String },
   yearOfCompletion2: { type: String },
-  collegeName: { type: String },
-  education3: { type: String },
-  course3: { type: String },
-  specialization: { type: String },
-  address3: { type: String },
   score3: { type: String },
-  courseDuration: { type: String },
   keySkills: { type: String },
   careerPreferences: { type: String },
 });
