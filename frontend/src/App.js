@@ -9,6 +9,7 @@ import TrainingCompanyDashboard from './components/company/TrainingCompanyDashbo
 import AllPrograms from './components/student/academics/AllPrograms';
 import AdminTrainingProgs from './components/admin/AdminTrainingProgs';
 import MaterialUpload from './components/company/MaterialUpload';
+import AttendanceTable from './components/admin/AttendanceTable';
 
 import CompanyLogIn from './components/login/CompanyLogIn';
 import CompanyRegister from './components/register/CompanyRegister'
@@ -112,7 +113,7 @@ function App() {
           <Route path='/AdminRegister' element={<AdminRegister />} />
           <Route path='/CompanyHome' element={<CompanyHome />} />
           <Route path='/trainingHome' element={<TrainingCompanyDashboard />} />
-
+          <Route path="/attendance/:programId" element={<AttendanceTable />} />
           <Route path='/AllPrograms' element={<AllPrograms />} />
           <Route path='/material-upload/:programId' element={<MaterialUpload />} />
 

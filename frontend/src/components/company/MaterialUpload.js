@@ -70,7 +70,7 @@ const MaterialUpload = () => {
           {uploading ? 'Uploading...' : 'Upload Materials'}
         </button>
         <button
-          onClick={() => navigate('/company-dashboard')}
+          onClick={() => navigate('/trainingHome')}
           className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
         >
           Back to Dashboard

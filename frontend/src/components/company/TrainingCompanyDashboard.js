@@ -64,10 +64,6 @@ const TrainingCompanyDashboard = () => {
       fetchAppliedStudents();
     }
   }, [programs]);
-  // Log appliedStudents whenever it changes
-  useEffect(() => {
-    console.log("Updated appliedStudents:", appliedStudents);
-  }, [appliedStudents]);
 
   const handleProgramChange = (e) => {
     const { name, value } = e.target;

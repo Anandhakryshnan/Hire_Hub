@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
+import QrScanner from "react-qr-scanner";
 
 const AllPrograms = () => {
   const [approvedPrograms, setApprovedPrograms] = useState([]);
   const [appliedMaterials, setAppliedMaterials] = useState([]);
   const [appliedPrograms, setAppliedProgramsState] = useState([]);
+  const [scannedData, setScannedData] = useState(""); // For storing scanned QR data
+  const [showScanner, setShowScanner] = useState(false); // Toggle QR scanner visibility
 
   useEffect(() => {
     // Fetch approved programs from the server
@@ -14,32 +17,33 @@ const AllPrograms = () => {
 
     // Fetch the applied programs for the student
     const studentId = localStorage.getItem("token"); // Assuming token contains studentId
+
     fetch(`http://localhost:9000/api/students/${studentId}/appliedPrograms`)
       .then((response) => response.json())
       .then((data) => {
         setAppliedProgramsState(data);
 
         // Fetch materials for each program the student has applied to
-        const materialsPromises = data.map((applied) =>
+        const materialsPromises = data.map((appliedProgram) =>
           fetch(
-            `http://localhost:9000/api/materials/${applied._id}?studentId=${studentId}`
+            `http://localhost:9000/api/materials/${appliedProgram._id}?studentId=${studentId}`
           )
-            .then((response) => {
-              if (response.ok) {
-                return response.json();
-              } else {
-                return []; // Return empty array if no materials are found
-              }
-            })
+            .then((response) => (response.ok ? response.json() : []))
             .catch((error) => {
               console.error("Error fetching materials:", error);
               return [];
             })
         );
 
-        // Aggregate all materials
+        // Aggregate materials by program
         Promise.all(materialsPromises).then((allMaterials) => {
-          setAppliedMaterials(allMaterials.flat()); // Flatten nested arrays of materials
+          // Map the materials back to each applied program
+          const programsWithMaterials = data.map((program, index) => ({
+            ...program,
+            materials: allMaterials[index], // Attach fetched materials to each program
+          }));
+
+          setAppliedMaterials(programsWithMaterials); // Set state with programs and their respective materials
         });
       })
       .catch((error) =>
@@ -61,12 +65,45 @@ const AllPrograms = () => {
       .then((response) => {
         if (response.ok) {
           alert("Applied successfully!");
-          setAppliedProgramsState((prevState) => [...prevState, { programId }]); // Add to applied programs list
+          setAppliedProgramsState((prevState) => [...prevState, { programId }]);
         } else {
           console.error("Error applying for program:", response.statusText);
         }
       })
       .catch((error) => console.error("Error:", error));
+  };
+
+  const handleScan = (data) => {
+    if (data) {
+      const scannedData = JSON.parse(data.text); // Parse QR data
+      const { sessionId, expiresAt } = scannedData;
+
+      if (new Date() > new Date(expiresAt)) {
+        alert("QR code has expired.");
+        return;
+      }
+
+      // Send sessionId and studentId to backend
+      const studentId = localStorage.getItem("token");
+      fetch("http://localhost:9000/api/markAttendance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId, studentId }),
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.success) {
+            alert("Attendance marked successfully!");
+          } else {
+            alert(result.error || "Error marking attendance");
+          }
+        })
+        .catch((err) => console.error("Error:", err));
+    }
+  };
+
+  const handleError = (err) => {
+    console.error("QR Scanner Error:", err);
   };
 
   return (
@@ -118,21 +155,66 @@ const AllPrograms = () => {
       </div>
 
       <h2 className="mb-4 text-center">Downloadable Materials</h2>
-      <ul className="list-group">
-        {appliedMaterials.map((material) => (
-          <li key={material._id} className="list-group-item">
-            {material.filename} -{" "}
-            <a
-              href={material.downloadLink}
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-link"
-            >
-              Download
-            </a>
-          </li>
+      <div className="space-y-6">
+        {appliedMaterials.map((program) => (
+          <div key={program._id} className="border rounded-lg p-4 shadow-lg">
+            <h3 className="text-xl font-semibold mb-4">{program.title}</h3>
+            <ul className="space-y-2">
+              {program.materials.length > 0 ? (
+                program.materials.map((material) => (
+                  <li
+                    key={material._id}
+                    className="flex justify-between items-center bg-gray-100 p-3 rounded-md hover:bg-gray-200 transition duration-300"
+                  >
+                    <span className="text-sm">{material.filename}</span>
+                    <a
+                      href={material.downloadLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn btn-link text-blue-600 hover:text-blue-800"
+                    >
+                      Download
+                    </a>
+                  </li>
+                ))
+              ) : (
+                <li className="text-sm text-gray-500">
+                  No materials available
+                </li>
+              )}
+            </ul>
+          </div>
         ))}
-      </ul>
+      </div>
+
+      <h2 className="mb-4 text-center">QR Code Scanner</h2>
+      <div className="text-center">
+        <button
+          className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition duration-300 mb-4"
+          onClick={() => {
+            return setShowScanner(!showScanner), console.log(appliedMaterials);
+          }}
+        >
+          {showScanner ? "Hide Scanner" : "Scan QR Code"}
+        </button>
+
+        {showScanner && (
+          <div className="flex justify-center">
+            <QrScanner
+              delay={300}
+              style={{ width: "300px" }}
+              onError={handleError}
+              onScan={handleScan}
+            />
+          </div>
+        )}
+
+        {scannedData && (
+          <p className="text-sm text-green-700 mt-4">
+            <strong>Scanned Data:</strong> {scannedData}
+          </p>
+        )}
+      </div>
     </div>
   );
 };
