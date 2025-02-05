@@ -5,29 +5,23 @@ const AllPrograms = () => {
   const [approvedPrograms, setApprovedPrograms] = useState([]);
   const [appliedMaterials, setAppliedMaterials] = useState([]);
   const [appliedPrograms, setAppliedProgramsState] = useState([]);
-  const [scannedData, setScannedData] = useState(""); // For storing scanned QR data
   const [showScanner, setShowScanner] = useState(false); // Toggle QR scanner visibility
+  const [isScanning, setIsScanning] = useState(false); // Prevent multiple scans
 
   useEffect(() => {
-    // Fetch approved programs from the server
-    fetch("http://localhost:9000/api/trainingPrograms/approved")
+    fetch("/api/trainingPrograms/approved")
       .then((response) => response.json())
       .then((data) => setApprovedPrograms(data))
       .catch((error) => console.error("Error fetching programs:", error));
 
-    // Fetch the applied programs for the student
-    const studentId = localStorage.getItem("token"); // Assuming token contains studentId
+    const studentId = localStorage.getItem("token");
 
-    fetch(`http://localhost:9000/api/students/${studentId}/appliedPrograms`)
+    fetch(`/api/students/${studentId}/appliedPrograms`)
       .then((response) => response.json())
       .then((data) => {
         setAppliedProgramsState(data);
-
-        // Fetch materials for each program the student has applied to
         const materialsPromises = data.map((appliedProgram) =>
-          fetch(
-            `http://localhost:9000/api/materials/${appliedProgram._id}?studentId=${studentId}`
-          )
+          fetch(`/api/materials/${appliedProgram._id}?studentId=${studentId}`)
             .then((response) => (response.ok ? response.json() : []))
             .catch((error) => {
               console.error("Error fetching materials:", error);
@@ -35,15 +29,12 @@ const AllPrograms = () => {
             })
         );
 
-        // Aggregate materials by program
         Promise.all(materialsPromises).then((allMaterials) => {
-          // Map the materials back to each applied program
           const programsWithMaterials = data.map((program, index) => ({
             ...program,
-            materials: allMaterials[index], // Attach fetched materials to each program
+            materials: allMaterials[index],
           }));
-
-          setAppliedMaterials(programsWithMaterials); // Set state with programs and their respective materials
+          setAppliedMaterials(programsWithMaterials);
         });
       })
       .catch((error) =>
@@ -54,8 +45,7 @@ const AllPrograms = () => {
   const handleApply = (programId) => {
     const studentId = localStorage.getItem("token");
 
-    // Apply for a program
-    fetch(`http://localhost:9000/api/trainingPrograms/${programId}/apply`, {
+    fetch(`/api/trainingPrograms/${programId}/apply`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -74,21 +64,16 @@ const AllPrograms = () => {
   };
 
   const handleScan = (data) => {
-    if (data) {
-      const scannedData = JSON.parse(data.text); // Parse QR data
-      const { sessionId, expiresAt } = scannedData;
+    if (data && !isScanning) {
+      setIsScanning(true); // Prevent further scans
 
-      if (new Date() > new Date(expiresAt)) {
-        alert("QR code has expired.");
-        return;
-      }
-
-      // Send sessionId and studentId to backend
+      const qrToken = data.text;
       const studentId = localStorage.getItem("token");
-      fetch("http://localhost:9000/api/markAttendance", {
+
+      fetch("/api/markAttendance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sessionId, studentId }),
+        body: JSON.stringify({ qrToken, studentId }),
       })
         .then((response) => response.json())
         .then((result) => {
@@ -98,7 +83,10 @@ const AllPrograms = () => {
             alert(result.error || "Error marking attendance");
           }
         })
-        .catch((err) => console.error("Error:", err));
+        .catch((err) => console.error("Error:", err))
+        .finally(() => {
+          setTimeout(() => setIsScanning(false), 3000); // Allow new scan after 3 seconds
+        });
     }
   };
 
@@ -191,9 +179,7 @@ const AllPrograms = () => {
       <div className="text-center">
         <button
           className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition duration-300 mb-4"
-          onClick={() => {
-            return setShowScanner(!showScanner), console.log(appliedMaterials);
-          }}
+          onClick={() => setShowScanner(!showScanner)}
         >
           {showScanner ? "Hide Scanner" : "Scan QR Code"}
         </button>
@@ -209,11 +195,6 @@ const AllPrograms = () => {
           </div>
         )}
 
-        {scannedData && (
-          <p className="text-sm text-green-700 mt-4">
-            <strong>Scanned Data:</strong> {scannedData}
-          </p>
-        )}
       </div>
     </div>
   );

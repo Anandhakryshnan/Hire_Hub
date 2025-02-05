@@ -21,7 +21,7 @@ const AdminLogIn = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:9000/api/adminLogin', {
+            const response = await fetch('/api/adminLogin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -1,5 +1,13 @@
 const mongoose = require("mongoose");
 
+const attendanceSchema = new mongoose.Schema({
+  programId: { type: mongoose.Schema.Types.ObjectId, ref: "Program", required: true },
+  studentId: { type: String, required: true },
+  markedAt: { type: Date, default: Date.now },
+});
+
+attendanceSchema.index({ sessionId: 1, studentId: 1 }, { unique: true }); // Prevent duplicate attendance
+
 const trainingProgramSchema = new mongoose.Schema({
   companyId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -492,6 +500,7 @@ const ResumeTemplateSchema = new mongoose.Schema({
 // Export the models
 module.exports = {
   TrainingProgram: mongoose.model('TrainingProgram', trainingProgramSchema),
+  Attendance: mongoose.model("Attendance", attendanceSchema),
   Application: mongoose.model('Application', applicationSchema),
   Material: mongoose.model('Material', materialSchema),
   Student: mongoose.model("student", StudentSchema),

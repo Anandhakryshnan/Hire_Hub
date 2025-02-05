@@ -10,7 +10,7 @@ const AdminDashboard = () => {
 
   // Fetch pending programs
   useEffect(() => {
-    fetch("http://localhost:9000/api/trainingPrograms/pending")
+    fetch("/api/trainingPrograms/pending")
       .then((response) => response.json())
       .then((data) => setPendingPrograms(data))
       .catch((error) => console.error("Error fetching pending programs:", error));
@@ -18,14 +18,14 @@ const AdminDashboard = () => {
 
   // Fetch approved programs
   useEffect(() => {
-    fetch("http://localhost:9000/api/trainingPrograms/approved")
+    fetch("/api/trainingPrograms/approved")
       .then((response) => response.json())
       .then((data) => setApprovedPrograms(data))
       .catch((error) => console.error("Error fetching approved programs:", error));
   }, []);
 
   const handleAction = (programId, action) => {
-    fetch(`http://localhost:9000/api/trainingPrograms/${programId}/${action}`, {
+    fetch(`/api/trainingPrograms/${programId}/${action}`, {
       method: "PUT",
     })
       .then((response) => {
@@ -34,7 +34,7 @@ const AdminDashboard = () => {
             prev.filter((program) => program._id !== programId)
           );
           if (action === "approve") {
-            fetch("http://localhost:9000/api/trainingPrograms/approved")
+            fetch("/api/trainingPrograms/approved")
               .then((response) => response.json())
               .then((data) => setApprovedPrograms(data));
           }
@@ -46,7 +46,7 @@ const AdminDashboard = () => {
   };
 
   const generateQrCode = (programId) => {
-    fetch(`http://localhost:9000/api/sessions/generateQr`, {
+    fetch(`/api/sessions/generateQr`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ programId, durationMinutes: 0.5 }), // 30 seconds

@@ -3,7 +3,7 @@ const cors = require('cors')
 const multer = require('multer');
 const app = express()
 const dotenv = require('dotenv')
-const { Student, Company, Posting, AppliedCandidate, Resume, ChatMessage, CompanySchedule, StudentInterview, Feedback, Admin, Template, TrainigComp, TrainingProgram, Application, Material } = require('./models')
+const { Student, Company, Posting, AppliedCandidate, Resume, ChatMessage, CompanySchedule, StudentInterview, Feedback, Admin, Template, TrainigComp, TrainingProgram, Application, Material, Session, Attendance } = require('./models')
 // const {Student, Company, Posting, AppliedCandidate, Admin} = require('./models')
 const email = require('./emailservice')
 const mongoose = require('mongoose')
@@ -36,6 +36,83 @@ app.use(express.json())
 const upload = multer({ storage });
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+
+app.post("/api/sessions/generateQr", (req, res) => {
+  const { programId, durationMinutes } = req.body;
+
+  if (!programId || !durationMinutes) {
+    return res.status(400).json({ error: "Program ID and duration are required" });
+  }
+
+  const createdAt = Date.now();
+  const expiresAt = createdAt + durationMinutes * 60 * 1000; // Convert minutes to milliseconds
+
+  // Create a JWT token
+  const token = jwt.sign({ programId, expiresAt }, process.env.JWT_SECRET, { expiresIn: durationMinutes * 60 });
+
+  res.json({
+    expiresAt,
+    qrCodeData: token, // Return the JWT as the QR code data
+  });
+});
+
+app.post("/api/markAttendance", async (req, res) => {
+  const { qrToken, studentId } = req.body; // Receive the JWT token
+
+  if (!qrToken || !studentId) {
+    return res.status(400).json({ error: "QR Token and Student ID are required" });
+  }
+
+  try {
+    // Verify and decode JWT
+    const decoded = jwt.verify(qrToken, process.env.JWT_SECRET);
+    const { programId, expiresAt } = decoded;
+
+    // Check if QR code is expired
+    if (Date.now() > expiresAt) {
+      return res.status(400).json({ error: "QR code has expired" });
+    }
+
+    // Prevent duplicate attendance
+    const attendanceExists = await Attendance.findOne({ programId, studentId });
+    if (attendanceExists) {
+      return res.status(400).json({ error: "Attendance already marked" });
+    }
+
+    // Save attendance
+    await Attendance.create({
+      programId,
+      studentId,
+    });
+
+    res.json({ success: true, message: "Attendance marked successfully" });
+  } catch (error) {
+    console.error("Error verifying QR token:", error);
+    res.status(400).json({ error: "Invalid QR token" });
+  }
+});
+
+app.get("/api/attendance/:programId", async (req, res) => {
+  const { programId } = req.params;
+
+  try {
+    const attendanceRecords = await Attendance.find({ programId });
+    if (!attendanceRecords.length) {
+      return res.status(404).json({ error: "No attendance data for this program" });
+    }
+    
+    res.json({
+      programId,
+      attendance: attendanceRecords.map((record) => ({
+        studentId: record.studentId,
+        markedAt: record.markedAt,
+      })),
+    });
+  } catch (error) {
+    console.error("Error fetching attendance:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 // Endpoint to handle multiple file uploads by the training company
 app.post('/upload-materials/:trainingId', upload.array('files'), async (req, res) => {

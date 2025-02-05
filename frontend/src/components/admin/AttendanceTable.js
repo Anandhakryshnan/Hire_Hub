@@ -12,7 +12,7 @@ const AttendanceTable = () => {
   // Fetch attendance data for the given programId
   useEffect(() => {
     if (programId) {
-      fetch(`http://localhost:9000/api/attendance/${programId}`)
+      fetch(`/api/attendance/${programId}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Error fetching attendance data");
@@ -114,8 +114,8 @@ const AttendanceTable = () => {
                     key={record._id}
                     className="border-b border-gray-200 hover:bg-gray-100"
                   >
-                    <td className="py-3 px-6 text-left">{record.name}</td>
-                    <td className="py-3 px-6 text-left">{record.rollNumber}</td>
+                    <td className="py-3 px-6 text-left">{record.studentId}</td>
+                    <td className="py-3 px-6 text-left">{record.studentId}</td>
                     <td className="py-3 px-6 text-left">{record.semester}</td>
                     <td className="py-3 px-6 text-left">{record.department}</td>
                     <td className="py-3 px-6 text-left">{record.attendance}%</td>

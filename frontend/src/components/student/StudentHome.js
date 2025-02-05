@@ -48,7 +48,7 @@ const StudentHome = () => {
     });
 
     useEffect(() => {
-        fetch(`http://localhost:9000/api/StudentProfile/${usn}`)
+        fetch(`/api/StudentProfile/${usn}`)
             .then((response) => response.json())
             .then((data) => {
                 let fullName = `${data?.firstName} ${data?.lastName}`
