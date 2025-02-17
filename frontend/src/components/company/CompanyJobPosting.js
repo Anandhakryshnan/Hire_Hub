@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import React, { useState } from 'react';
 import { TiHomeOutline } from 'react-icons/ti';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import { CiLogin, CiLogout } from 'react-icons/ci';
 import { GoSearch } from 'react-icons/go';
@@ -11,9 +12,9 @@ import { FaPeopleArrows } from "react-icons/fa6";
 import BgColorAnimation from '../../animations/BgColorAnimation';
 
 const CompanyJobPosting = () => {
-    const Name =localStorage.getItem('name')
-    const userToken = localStorage.getItem('token')
-    const companyEmail=userToken
+    const location = useLocation();
+    const Name = location.state.name;
+    const companyEmail= location.state.email
     const [jobRole,setJobRole] = useState('');
     const [JobDescription,setJobDiscription] = useState('');
     const [Package,setPackage] = useState('');

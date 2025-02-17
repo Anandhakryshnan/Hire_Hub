@@ -92,6 +92,7 @@ function App() {
           <Route path='/admin/companies' element={<AdminCompany />} />
 
           <Route path='/admin/trainingPrograms' element={<AdminTrainingProgs />} />
+          <Route path='/admin/companies/add-job' element={<CompanyJobPosting />} />
 
 
           <Route path='/admin/jobPosting' element={<AdminJobPosting />} />
@@ -121,6 +122,8 @@ function App() {
           <Route path='/EditStudentProfile' element={<EditStudentProfile />} />
           <Route path='/chat' element={<ChatPage />} />
           <Route path='/NewJobPosting' element={<CompanyJobPosting />} />
+
+
           <Route path='/ALLJobRole' element={<HiringCompanies />} />
           <Route path='/JobDescription' element={<StudentHiringView />} />
           <Route path='/ViewJobPosting' element={<AllJobPosted />} />

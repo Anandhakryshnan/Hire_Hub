@@ -91,7 +91,8 @@ const AttendanceTable = () => {
             <thead className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <tr>
                 <th className="py-3 px-6 text-left">Name</th>
-                <th className="py-3 px-6 text-left">Roll Number</th>
+                <th className="py-3 px-6 text-left">Phone</th>
+                <th className="py-3 px-6 text-left">Email</th>
                 <th
                   className="py-3 px-6 text-left cursor-pointer"
                   onClick={() => handleSort("semester")}
@@ -104,7 +105,6 @@ const AttendanceTable = () => {
                 >
                   Department {sortKey === "department" && (sortOrder === "asc" ? "▲" : "▼")}
                 </th>
-                <th className="py-3 px-6 text-left">Attendance</th>
               </tr>
             </thead>
             <tbody className="text-gray-700 text-sm font-light">
@@ -114,11 +114,11 @@ const AttendanceTable = () => {
                     key={record._id}
                     className="border-b border-gray-200 hover:bg-gray-100"
                   >
-                    <td className="py-3 px-6 text-left">{record.studentId}</td>
-                    <td className="py-3 px-6 text-left">{record.studentId}</td>
+                    <td className="py-3 px-6 text-left">{record.name}</td>
+                    <td className="py-3 px-6 text-left">{record.phone}</td>
+                    <td className="py-3 px-6 text-left">{record.email}</td>
                     <td className="py-3 px-6 text-left">{record.semester}</td>
                     <td className="py-3 px-6 text-left">{record.department}</td>
-                    <td className="py-3 px-6 text-left">{record.attendance}%</td>
                   </tr>
                 ))
               ) : (

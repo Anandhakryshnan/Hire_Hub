@@ -11,6 +11,7 @@ import { FaRegUser } from 'react-icons/fa';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 
 const  AdminCompany = () => {
+    const navigate = useNavigate();
     const [postingData, setPostingData] = useState([]);
 
     useEffect(() => {
@@ -29,6 +30,9 @@ const  AdminCompany = () => {
                 });
             })
     }, [])
+    const handleAddJob = (company) => {
+        navigate("./add-job", { state: { name: company.name, email: company.email } });
+      };
     
     return (  
         <div>
@@ -52,7 +56,7 @@ const  AdminCompany = () => {
                                 backgroundColor: '#216C34',
                                 fontSize: '16px',
                             }}>
-                                {['Company Name', 'Website Link', 'Email'].map((cell, indx) => (
+                                {['Company Name', 'Website Link', 'Email', 'Action'].map((cell, indx) => (
                                     <TableCell
                                     sx={{
                                         fontSize: '18px',
@@ -80,6 +84,7 @@ const  AdminCompany = () => {
                                     </TableCell>
 
                                     <TableCell>{posting.email}</TableCell>
+                                    <TableCell><button onClick={() => handleAddJob(posting)} className="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-2 rounded">Add New Job</button></TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

@@ -100,19 +100,36 @@ app.get("/api/attendance/:programId", async (req, res) => {
     if (!attendanceRecords.length) {
       return res.status(404).json({ error: "No attendance data for this program" });
     }
-    
+
+    // Fetch student details
+    const studentIds = attendanceRecords.map(record => record.studentId);
+    const students = await Student.find({ usn: { $in: studentIds } });
+
+    // Map attendance records with student details
+    const attendanceWithDetails = attendanceRecords.map(record => {
+      const student = students.find(s => s.usn.toString() === record.studentId.toString());
+      
+      return {
+        studentId: record.studentId,
+        name: student ? student.firstName : "Unknown",
+        phone:student.contactNumber,
+        email: student ? student.email : "Unknown",
+        semester: student.currentSemester,
+        department: student.department,
+        markedAt: record.markedAt,
+      };
+    });
+
     res.json({
       programId,
-      attendance: attendanceRecords.map((record) => ({
-        studentId: record.studentId,
-        markedAt: record.markedAt,
-      })),
+      attendance: attendanceWithDetails,
     });
   } catch (error) {
     console.error("Error fetching attendance:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 // Endpoint to handle multiple file uploads by the training company
 app.post('/upload-materials/:trainingId', upload.array('files'), async (req, res) => {
