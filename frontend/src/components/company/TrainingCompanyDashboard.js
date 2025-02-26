@@ -195,10 +195,10 @@ const TrainingCompanyDashboard = () => {
                       className="p-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm flex items-center gap-2"
                     >
                       <span className="inline-block w-8 h-8 bg-blue-500 text-white text-center font-bold rounded-full">
-                        {student.studentId.slice(-2).toUpperCase()}
+                        {student.name.slice(-2).toUpperCase()}
                       </span>
                       <span className="text-gray-700">
-                        Student Name : {student.studentId}
+                        Student Name : {student.name}
                       </span>
                     </li>
                   ))}

@@ -33,7 +33,6 @@ const AllJobPosted = () => {
             })
     }, [])
     const handleViewApplicants = (jobId) => {
-        console.log(jobId);
         
         fetch(`http://localhost:9000/api/getCandidateList/${jobId}`)
             .then((response) => response.json())

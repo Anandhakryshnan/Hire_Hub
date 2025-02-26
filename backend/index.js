@@ -111,7 +111,7 @@ app.get("/api/attendance/:programId", async (req, res) => {
       
       return {
         studentId: record.studentId,
-        name: student ? student.firstName : "Unknown",
+        name: student ? `${student.firstName} ${student.lastName}` : "Unknown",
         phone:student.contactNumber,
         email: student ? student.email : "Unknown",
         semester: student.currentSemester,
@@ -238,8 +238,25 @@ app.get('/api/appliedStudents', async (req, res) => {
   
   try {
     const appliedStudents = await Application.find({trainingId: programId});
+    // Fetch student details
+    const studentIds = appliedStudents.map(record => record.studentId);
+    const students = await Student.find({ usn: { $in: studentIds } });
+
+    // Map attendance records with student details
+    const appliedStudentsNames = appliedStudents.map(record => {
+      const student = students.find(s => s.usn.toString() === record.studentId.toString());
+      
+      return {
+        studentId: record.studentId,
+        name: student ? `${student.firstName} ${student.lastName}` : "Unknown",
+        phone:student.contactNumber,
+        email: student ? student.email : "Unknown",
+        semester: student.currentSemester,
+        department: student.department,
+      };
+    });
     
-    res.json(appliedStudents);
+    res.json(appliedStudentsNames);
   } catch (err) {
     res.status(500).json({ error: 'Error fetching applied students', err });
   }
@@ -637,10 +654,32 @@ app.post('/api/newJobApplied', async (req, res) => {
 
 app.get('/api/getCandidateList/:id', async (req, res) => {
   const jobId = req.params.id;
-  console.log("HI")
   try {
     const list = await AppliedCandidate.find({ jobid: jobId })  //check logic
-    res.status(200).json(list);
+    
+
+    // Fetch student details
+    const studentIds = list.map(record => record.usn);
+    const students = await Student.find({ usn: { $in: studentIds } });
+    
+
+    // Map attendance records with student details
+    const appliedStudentsDet = list.map(record => {
+      const student = students.find(s => s.usn.toString() === record.usn.toString());
+      
+      return {
+        _id: record._id,
+        usn: record.usn,
+        status: record.status,
+        jobid: record.jobid,
+        name: student ? `${student.firstName} ${student.lastName}` : "Unknown",
+        phone:student.contactNumber,
+        email: student ? student.email : "Unknown",
+        semester: student.currentSemester,
+        department: student.department,
+      };
+    });
+    res.status(200).json(appliedStudentsDet);
   } catch (error) {
     console.log(error)
     res.status(500).json({ error: 'Failed to retrieve job postings.' });

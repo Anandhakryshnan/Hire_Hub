@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import QrScanner from "react-qr-scanner";
 
 const AllPrograms = () => {
   const [approvedPrograms, setApprovedPrograms] = useState([]);
   const [appliedMaterials, setAppliedMaterials] = useState([]);
   const [appliedPrograms, setAppliedProgramsState] = useState([]);
-  const [showScanner, setShowScanner] = useState(false); // Toggle QR scanner visibility
-  const [isScanning, setIsScanning] = useState(false); // Prevent multiple scans
 
   useEffect(() => {
     fetch("/api/trainingPrograms/approved")
@@ -63,36 +60,6 @@ const AllPrograms = () => {
       .catch((error) => console.error("Error:", error));
   };
 
-  const handleScan = (data) => {
-    if (data && !isScanning) {
-      setIsScanning(true); // Prevent further scans
-
-      const qrToken = data.text;
-      const studentId = localStorage.getItem("token");
-
-      fetch("/api/markAttendance", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ qrToken, studentId }),
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          if (result.success) {
-            alert("Attendance marked successfully!");
-          } else {
-            alert(result.error || "Error marking attendance");
-          }
-        })
-        .catch((err) => console.error("Error:", err))
-        .finally(() => {
-          setTimeout(() => setIsScanning(false), 3000); // Allow new scan after 3 seconds
-        });
-    }
-  };
-
-  const handleError = (err) => {
-    console.error("QR Scanner Error:", err);
-  };
 
   return (
     <div className="container mt-5">
@@ -173,28 +140,6 @@ const AllPrograms = () => {
             </ul>
           </div>
         ))}
-      </div>
-
-      <h2 className="mb-4 text-center">QR Code Scanner</h2>
-      <div className="text-center">
-        <button
-          className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition duration-300 mb-4"
-          onClick={() => setShowScanner(!showScanner)}
-        >
-          {showScanner ? "Hide Scanner" : "Scan QR Code"}
-        </button>
-
-        {showScanner && (
-          <div className="flex justify-center">
-            <QrScanner
-              delay={300}
-              style={{ width: "300px" }}
-              onError={handleError}
-              onScan={handleScan}
-            />
-          </div>
-        )}
-
       </div>
     </div>
   );

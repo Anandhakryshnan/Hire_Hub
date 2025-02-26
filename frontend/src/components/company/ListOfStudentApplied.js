@@ -94,8 +94,8 @@ const ApplicationTable = () => {
 
                         <TableBody>
                             {data?.map((application) => (
-                                <TableRow key={application.id}>
-                                    <TableCell>{application.usn}</TableCell>
+                                <TableRow key={application._id}>
+                                    <TableCell>{application.name}</TableCell>
 
                                     <TableCell>
                                         <Button variant="contained" color="primary" onClick={() => handleViewResume(application.usn)}>
