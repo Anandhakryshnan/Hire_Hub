@@ -67,6 +67,7 @@ app.post("/api/markAttendance", async (req, res) => {
     // Verify and decode JWT
     const decoded = jwt.verify(qrToken, process.env.JWT_SECRET);
     const { programId, expiresAt } = decoded;
+    
 
     // Check if QR code is expired
     if (Date.now() > expiresAt) {

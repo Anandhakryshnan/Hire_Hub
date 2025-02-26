@@ -6,7 +6,7 @@ const attendanceSchema = new mongoose.Schema({
   markedAt: { type: Date, default: Date.now },
 });
 
-attendanceSchema.index({ sessionId: 1, studentId: 1 }, { unique: true }); // Prevent duplicate attendance
+attendanceSchema.index({ programId: 1, studentId: 1 }, { unique: true }); // Prevent duplicate attendance
 
 const trainingProgramSchema = new mongoose.Schema({
   companyId: {
