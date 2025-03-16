@@ -1,6 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { TiHomeOutline } from "react-icons/ti";
+import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
+import { CiLogout } from "react-icons/ci";
+import { GoSearch } from "react-icons/go";
+import { TbDatabaseSearch } from "react-icons/tb";
+import { FaRegUser, FaPeopleArrows } from "react-icons/fa";
+import BgColorAnimation from "../../animations/BgColorAnimation";
 
 const TrainingCompanyDashboard = () => {
   const companyId = localStorage.getItem("token");
@@ -93,155 +100,216 @@ const TrainingCompanyDashboard = () => {
   };
 
   return (
-    <div className="p-6 bg-white rounded-md shadow-md max-w-4xl mx-auto mt-8">
-      <h1 className="text-2xl font-semibold mb-4">Company Dashboard</h1>
+    <BgColorAnimation
+      child={
+        <div className="w-full h-screen overflow-y-auto">
+          <div className="h-full overflow-y-auto grid grid-cols-1 lg:grid-cols-2 gap-8 p-8 pt-[6rem]">
+            {/* New Program Card */}
+            <AnimatedGradientBorderTW>
+              <div className="bg-[#131219] p-6 rounded-lg">
+                <h2 className="text-xl font-bold text-violet-400 mb-4">
+                  New Training Program
+                </h2>
+                <div className="space-y-4">
+                  <InputField
+                    label="Title"
+                    name="title"
+                    value={newProgram.title}
+                    onChange={handleProgramChange}
+                  />
+                  <InputField
+                    label="Description"
+                    name="description"
+                    textarea
+                    value={newProgram.description}
+                    onChange={handleProgramChange}
+                  />
+                  <InputField
+                    label="Venue"
+                    name="venue"
+                    value={newProgram.venue}
+                    onChange={handleProgramChange}
+                  />
+                  <div className="grid grid-cols-2 gap-4">
+                    <InputField
+                      label="From Date"
+                      name="fromDate"
+                      type="date"
+                      value={newProgram.fromDate}
+                      onChange={handleProgramChange}
+                    />
+                    <InputField
+                      label="To Date"
+                      name="toDate"
+                      type="date"
+                      value={newProgram.toDate}
+                      onChange={handleProgramChange}
+                    />
+                  </div>
+                  <InputField
+                    label="Time"
+                    name="time"
+                    type="time"
+                    value={newProgram.time}
+                    onChange={handleProgramChange}
+                  />
+                  <button
+                    onClick={handleAddProgram}
+                    className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-2 rounded-lg hover:opacity-90 transition-opacity"
+                  >
+                    Create Program
+                  </button>
+                </div>
+              </div>
+            </AnimatedGradientBorderTW>
 
-      {/* Upload New Program */}
-      <div className="mb-6 p-4 bg-white shadow rounded-lg">
-        <h2 className="text-xl font-semibold mb-4">Upload Training Program</h2>
-        <input
-          type="text"
-          name="title"
-          placeholder="Program Title"
-          className="block w-full mb-3 p-2 border"
-          value={newProgram.title}
-          onChange={handleProgramChange}
-        />
-        <textarea
-          name="description"
-          placeholder="Program Description"
-          className="block w-full mb-3 p-2 border"
-          value={newProgram.description}
-          onChange={handleProgramChange}
-        />
-        <input
-          type="text"
-          name="venue"
-          placeholder="Venue"
-          className="block w-full mb-3 p-2 border"
-          value={newProgram.venue}
-          onChange={handleProgramChange}
-        />
-        <label className="block mb-2 font-medium">From Date</label>
-        <input
-          type="date"
-          name="fromDate"
-          className="block w-full mb-3 p-2 border"
-          value={newProgram.fromDate}
-          onChange={handleProgramChange}
-        />
-        <label className="block mb-2 font-medium">To Date</label>
-        <input
-          type="date"
-          name="toDate"
-          className="block w-full mb-3 p-2 border"
-          value={newProgram.toDate}
-          onChange={handleProgramChange}
-        />
-        <input
-          type="time"
-          name="time"
-          className="block w-full mb-3 p-2 border"
-          value={newProgram.time}
-          onChange={handleProgramChange}
-        />
-        <button
-          onClick={handleAddProgram}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md"
-        >
-          Add Program
-        </button>
-      </div>
-
-      {/* View Applied Students */}
-      <div className="mb-6 p-6 bg-gray-50 shadow rounded-lg">
-        <h2 className="text-2xl font-bold mb-6 text-gray-700">
-          Applied Students (Program-wise)
-        </h2>
-        {appliedStudents.map((students, programIndex) => (
-          <div
-            key={programIndex}
-            className="mb-6 p-4 border bg-white rounded-lg shadow-md"
-          >
-            {/* Program Title */}
-            <h3 className="text-xl font-semibold text-blue-600 mb-4">
-              {programs[programIndex]?.title || "Unknown Program"}
-            </h3>
-
-            {/* Program Details */}
-            <div className="text-gray-600 mb-3">
-              <p className="mb-1">
-                <span className="font-medium">Venue:</span>{" "}
-                {programs[programIndex]?.venue || "N/A"}
-              </p>
-              <p className="mb-1">
-                <span className="font-medium">Date:</span>{" "}
-                {new Date(programs[programIndex]?.fromDate).toLocaleDateString() || "N/A"} to{" "}
-                {new Date(programs[programIndex]?.toDate).toLocaleDateString() || "N/A"}
-              </p>
-              <p className="mb-1">
-                <span className="font-medium">Time:</span>{" "}
-                {programs[programIndex]?.time || "N/A"}
-              </p>
-            </div>
-
-            {/* Applied Students List */}
-            <div className="mt-4">
-              {students.length > 0 ? (
-                <ul className="space-y-2">
-                  {students.map((student) => (
-                    <li
-                      key={student._id}
-                      className="p-2 bg-gray-100 border border-gray-300 rounded-md shadow-sm flex items-center gap-2"
+            {/* Current Programs Card */}
+            <AnimatedGradientBorderTW>
+              <div className="bg-[#131219] p-6 rounded-lg">
+                <h2 className="text-xl font-bold text-violet-400 mb-4">
+                  Active Programs
+                </h2>
+                <div className="space-y-4">
+                  {programs.map((program, index) => (
+                    <div
+                      key={index}
+                      className="border-b border-slate-700 pb-4 last:border-b-0"
                     >
-                      <span className="inline-block w-8 h-8 bg-blue-500 text-white text-center font-bold rounded-full">
-                        {student.name.slice(-2).toUpperCase()}
-                      </span>
-                      <span className="text-gray-700">
-                        Student Name : {student.name}
-                      </span>
-                    </li>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-medium text-cyan-200">
+                            {program.title}
+                          </h3>
+                          <p className="text-sm text-slate-400 mt-1">
+                            {new Date(program.fromDate).toLocaleDateString()} -{" "}
+                            {new Date(program.toDate).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <Link
+                          to={`/material-upload/${program._id}`}
+                          className="px-3 py-1 bg-slate-800 hover:bg-slate-700 rounded-md text-sm text-violet-300"
+                        >
+                          Upload Materials
+                        </Link>
+                      </div>
+                    </div>
                   ))}
-                </ul>
-              ) : (
-                <p className="text-gray-500 italic">
-                  No students applied for this program.
-                </p>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+                </div>
+              </div>
+            </AnimatedGradientBorderTW>
 
-      {/* View Programs */}
-      <div className="p-4 bg-white shadow rounded-lg">
-        <h2 className="text-xl font-semibold mb-4">Uploaded Programs</h2>
-        <ul>
-          {programs.map((program, index) => (
-            <li key={index} className="mb-2">
-              <strong>{program.title}</strong> - {new Date(program.date).toLocaleDateString()} at{" "}
-              {program.time}
-              <Link
-                to={`/material-upload/${program._id}`}
-                className="ml-4 text-blue-500"
-              >
-                Upload Materials
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+            {/* Applications Card */}
+            <AnimatedGradientBorderTW>
+              <div className="bg-[#131219] p-6 rounded-lg lg:col-span-2">
+                <h2 className="text-xl font-bold text-violet-400 mb-4">
+                  Student Applications
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {appliedStudents.map((students, programIndex) => (
+                    <div
+                      key={programIndex}
+                      className="bg-slate-800 p-4 rounded-lg"
+                    >
+                      <div className="flex justify-between items-center mb-3">
+                        <h3 className="font-medium text-cyan-200">
+                          {programs[programIndex]?.title || "Unnamed Program"}
+                        </h3>
+                        <span className="text-sm bg-indigo-900 text-indigo-300 px-2 py-1 rounded">
+                          {students.length} applicants
+                        </span>
+                      </div>
+
+                      <div className="space-y-3">
+                        {students.length > 0 ? (
+                          students.map((student) => (
+                            <div
+                              key={student._id}
+                              className="flex items-center p-3 bg-slate-900 rounded-md"
+                            >
+                              <div className="flex-shrink-0 w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center text-white font-medium">
+                                {student.name.charAt(0)}
+                              </div>
+                              <div className="ml-3">
+                                <p className="text-sm font-medium text-cyan-200">
+                                  {student.name}
+                                </p>
+                                <p className="text-xs text-slate-400">
+                                  {student.email}
+                                </p>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-center py-4 text-slate-500">
+                            No applications yet
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </AnimatedGradientBorderTW>
+          </div>
+        </div>
+      }
+    />
   );
 };
 
+const InputField = ({ label, textarea = false, ...props }) => (
+  <div>
+    <label className="block text-sm text-cyan-300 mb-1">{label}</label>
+    {textarea ? (
+      <textarea
+        className="w-full bg-slate-800 text-cyan-200 rounded-lg p-2 border border-slate-700 focus:border-violet-500 outline-none"
+        rows="3"
+        {...props}
+      />
+    ) : (
+      <input
+        className="w-full bg-slate-800 text-cyan-200 rounded-lg p-2 border border-slate-700 focus:border-violet-500 outline-none"
+        {...props}
+      />
+    )}
+  </div>
+);
+
+// Keep all NavBar and related components from reference
+// Include AnimatedGradientBorderTW, NavBar, Chip, AnimatedHamburgerButton,
+// Option, FlyoutLink, userActions, etc. exactly as in reference
+
 export default TrainingCompanyDashboard;
 
-// [
-//   [
-//     {_id}
-//   ],
-//   [
+const AnimatedGradientBorderTW = ({ children }) => {
+  const boxRef = useRef(null);
 
-//   ]
-// ]
+  useEffect(() => {
+    const boxElement = boxRef.current;
+
+    if (!boxElement) return;
+
+    const updateAnimation = () => {
+      const angle =
+        (parseFloat(boxElement.style.getPropertyValue("--angle")) + 0.5) % 360;
+      boxElement.style.setProperty("--angle", `${angle}deg`);
+      requestAnimationFrame(updateAnimation);
+    };
+
+    requestAnimationFrame(updateAnimation);
+  }, []);
+
+  return (
+    <div
+      style={{
+        "--angle": "0deg",
+        "--border-color": "linear-gradient(var(--angle), #070707, #687aff)",
+        "--bg-color": "linear-gradient(#131219, #131219)",
+      }}
+      className="flex items-center justify-center rounded-lg border-2 border-[#0000] p-3 [background:padding-box_var(--bg-color),border-box_var(--border-color)]"
+      ref={boxRef}
+    >
+      {children}
+    </div>
+  );
+};

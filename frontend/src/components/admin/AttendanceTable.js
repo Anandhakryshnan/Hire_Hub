@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { CSVLink } from "react-csv";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 
 const AttendanceTable = () => {
   const { programId } = useParams(); // Get programId from the URL parameters
@@ -43,97 +44,79 @@ const AttendanceTable = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10">
-      <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">
-          Attendance Report
-        </h1>
+    <div>
+      <div className="text-center mt-3 font-robotoMono text-2xl font-bold text-slate-800">
+        Attendance Report
+      </div>
 
-        <div className="flex justify-between items-center mb-4">
-          <p className="text-gray-600">Sort by:</p>
-          <div className="space-x-2">
-            <button
-              className={`py-2 px-4 rounded bg-blue-500 text-white hover:bg-blue-600 ${
-                sortKey === "semester" ? "font-bold" : ""
-              }`}
-              onClick={() => handleSort("semester")}
-            >
-              Semester
-            </button>
-            <button
-              className={`py-2 px-4 rounded bg-blue-500 text-white hover:bg-blue-600 ${
-                sortKey === "department" ? "font-bold" : ""
-              }`}
-              onClick={() => handleSort("department")}
-            >
-              Department
-            </button>
-            <button
-              className={`py-2 px-4 rounded bg-blue-500 text-white hover:bg-blue-600 ${
-                sortKey === "name" ? "font-bold" : ""
-              }`}
-              onClick={() => handleSort("name")}
-            >
-              Name
-            </button>
-          </div>
-          <CSVLink
-            data={sortedData}
-            filename={`attendance-report-${programId}.csv`}
-            className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
-          >
-            Download Report
-          </CSVLink>
-        </div>
+      <div className="flex justify-center mt-5">
+        <TableContainer
+          component={Paper}
+          sx={{
+            margin: "10px",
+            width: "95%",
+            borderBottom: "1px solid black",
+            backgroundColor: "#EFFDF5",
+          }}
+        >
+          <Table>
+            <TableHead>
+              <TableRow
+                sx={{
+                  backgroundColor: "#216C34",
+                  fontSize: "16px",
+                }}
+              >
+                {["Name", "Phone", "Email", "Semester", "Department"].map((cell, indx) => (
+                  <TableCell
+                    sx={{
+                      fontSize: "18px",
+                      fontWeight: "bold",
+                      border: "2px solid #3E8C5F",
+                      cursor: "pointer",
+                    }}
+                    key={indx}
+                    onClick={() => handleSort(cell.toLowerCase())}
+                  >
+                    <span className="text-green-800">
+                      {cell} {sortKey === cell.toLowerCase() && (sortOrder === "asc" ? "▲" : "▼")}
+                    </span>
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white shadow rounded-lg">
-            <thead className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-              <tr>
-                <th className="py-3 px-6 text-left">Name</th>
-                <th className="py-3 px-6 text-left">Phone</th>
-                <th className="py-3 px-6 text-left">Email</th>
-                <th
-                  className="py-3 px-6 text-left cursor-pointer"
-                  onClick={() => handleSort("semester")}
-                >
-                  Semester {sortKey === "semester" && (sortOrder === "asc" ? "▲" : "▼")}
-                </th>
-                <th
-                  className="py-3 px-6 text-left cursor-pointer"
-                  onClick={() => handleSort("department")}
-                >
-                  Department {sortKey === "department" && (sortOrder === "asc" ? "▲" : "▼")}
-                </th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-700 text-sm font-light">
+            <TableBody sx={{ color: "black" }}>
               {sortedData.length > 0 ? (
                 sortedData.map((record) => (
-                  <tr
-                    key={record._id}
-                    className="border-b border-gray-200 hover:bg-gray-100"
-                  >
-                    <td className="py-3 px-6 text-left">{record.name}</td>
-                    <td className="py-3 px-6 text-left">{record.phone}</td>
-                    <td className="py-3 px-6 text-left">{record.email}</td>
-                    <td className="py-3 px-6 text-left">{record.semester}</td>
-                    <td className="py-3 px-6 text-left">{record.department}</td>
-                  </tr>
+                  <TableRow key={record._id}>
+                    <TableCell>{record.name}</TableCell>
+                    <TableCell>{record.phone}</TableCell>
+                    <TableCell>{record.email}</TableCell>
+                    <TableCell>{record.semester}</TableCell>
+                    <TableCell>{record.department}</TableCell>
+                  </TableRow>
                 ))
               ) : (
-                <tr>
-                  <td
-                    colSpan="5"
-                    className="text-center py-4 text-gray-500 font-medium"
-                  >
+                <TableRow>
+                  <TableCell colSpan="5" className="text-center py-4 text-gray-500 font-medium">
                     No attendance records available.
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               )}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+
+      <div className="flex justify-center mt-4">
+        <CSVLink
+          data={sortedData}
+          filename={`attendance-report-${programId}.csv`}
+          className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
+        >
+          Download Report
+        </CSVLink>
       </div>
     </div>
   );
