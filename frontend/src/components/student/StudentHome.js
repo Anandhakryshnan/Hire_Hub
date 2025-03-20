@@ -119,6 +119,7 @@ const tabs = [
   { text: "Home", icon: <TiHomeOutline />, path: "/StudentHome" },
   { text: "Schedule", icon: <AiOutlineSchedule />, path: "/StudentSchedule" },
   { text: "Resume", icon: <MdOutlineAccountCircle />, path: "/createResume" },
+  {text: "Attendence", icon: <AiOutlineSchedule />, path: "/student-attendance"},
 ];
 
 const NavBar = ({ name }) => {

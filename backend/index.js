@@ -10,6 +10,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const studentProfileModel = require('./studentprofile')
 const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer');
 const axios = require('axios')
 const path = require('path');
 dotenv.config()
@@ -36,6 +37,157 @@ app.use(express.json())
 const upload = multer({ storage });
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
+
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+// Stateless verification tokens
+const createOTPToken = (email, userType, otp) => {
+  return jwt.sign(
+    { email, userType, otp, timestamp: Date.now() },
+    process.env.JWT_SECRET,
+    { expiresIn: '10m' }
+  );
+};
+
+const createResetToken = (email, userType) => {
+  return jwt.sign(
+    { email, userType },
+    process.env.JWT_SECRET,
+    { expiresIn: '15m' }
+  );
+};
+
+// Find user by email and type
+const findUser = async (email, userType) => {
+  switch (userType) {
+    case 'student':
+      return await Student.findOne({ email });
+    case 'company':
+      return await Company.findOne({ email });
+    case 'trainigcomp':
+      return await TrainigComp.findOne({ email });
+    default:
+      return null;
+  }
+};
+
+// Update user password
+const updateUserPassword = async (email, userType, newPassword) => {
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  switch (userType) {
+    case 'student':
+      return await Student.updateOne({ email }, { password: hashedPassword });
+    case 'company':
+      return await Company.updateOne({ email }, { password: hashedPassword });
+    case 'trainigcomp':
+      return await TrainigComp.updateOne({ email }, { password: hashedPassword });
+    default:
+      return null;
+  }
+};
+
+// Routes
+app.post('/api/auth/send-otp', async (req, res) => {
+  const { email, userType } = req.body;
+  console.log(email);
+  
+  // Verify user exists
+  const user = await findUser(email, userType);
+  if (!user) return res.status(404).json({ error: 'User not found' });
+
+  // Generate OTP and token
+  const otp = generateOTP();
+  const otpToken = createOTPToken(email, userType, otp);
+
+  try {
+    // Send OTP via email
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Password Reset OTP',
+      html: `<p>Your OTP is: <strong>${otp}</strong></p>`
+    });
+
+    res.json({ 
+      message: 'OTP sent successfully',
+      otpToken // In production, include this in the email link
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to send OTP' });
+  }
+});
+
+app.post('/api/auth/verify-otp', async (req, res) => {
+  const { otp, otpToken } = req.body;
+
+  try {
+    // Verify OTP token
+    const decoded = jwt.verify(otpToken, process.env.JWT_SECRET);
+    
+    // Check OTP match
+    if (decoded.otp !== otp) {
+      return res.status(400).json({ error: 'Invalid OTP' });
+    }
+
+    // Check token expiration
+    if (Date.now() - decoded.timestamp > 600000) {
+      return res.status(400).json({ error: 'OTP expired' });
+    }
+
+    // Issue password reset token
+    const resetToken = createResetToken(decoded.email, decoded.userType);
+    res.json({ resetToken });
+
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: 'Invalid or expired token' });
+  }
+});
+
+app.post('/api/auth/reset-password', async (req, res) => {
+  const { resetToken, newPassword, confirmPassword } = req.body;
+
+  try {
+    // Verify reset token
+    const decoded = jwt.verify(resetToken, process.env.JWT_SECRET);
+    
+    // Check password match
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ error: 'Passwords do not match' });
+    }
+
+    // Update password
+    await updateUserPassword(decoded.email, decoded.userType, newPassword);
+    
+    res.json({ message: 'Password reset successfully' });
+
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: 'Invalid or expired token' });
+  }
+});
+
+app.get("/api/student/attendance/:studentId", async (req, res) => {
+  const { studentId } = req.params;
+  try {
+    const attendanceRecords = await Attendance.find({ studentId }).populate("programId");
+    
+    res.json({ success: true, attendance: attendanceRecords });
+  } catch (error) {
+    console.error("Error fetching attendance:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 app.post("/api/sessions/generateQr", (req, res) => {
   const { programId, durationMinutes } = req.body;
@@ -793,37 +945,54 @@ app.get('/api/getadminposting', async (req, res) => {
 
 app.post('/api/studentRegister', async (req, res) => {
   try {
-    const studentData = req.body;
-    const student = new Student(studentData);
+    const { usn, password, ...rest } = req.body;
+
+    // Check if student already exists
+    const existingStudent = await Student.findOne({ usn });
+    if (existingStudent) {
+      return res.status(400).json({ message: 'Student already exists' });
+    }
+
+    // Hash the password
+    const salt = await bcrypt.genSalt(10); // Generate a salt
+    const hashedPassword = await bcrypt.hash(password, salt); // Hash the password
+
+    // Create new student with hashed password
+    const student = new Student({
+      usn,
+      password: hashedPassword, // Store the hashed password
+      ...rest,
+    });
+
     await student.save();
-    res.status(201).json({ message: 'ok' });
+    res.status(201).json({ message: 'Student registered successfully' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-app.post('/api/studentLogin', async (req, res) => {
 
+app.post('/api/studentLogin', async (req, res) => {
   const { usn, password } = req.body;
 
   try {
-
+    // Find student by USN
     const student = await Student.findOne({ usn });
 
     if (!student) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
+    // Compare hashed password
+    const isPasswordValid = await bcrypt.compare(password, student.password);
 
-    // const isPasswordValid = await compare(password, student.password);
-
-    if (password != student.password) {
+    if (!isPasswordValid) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-
-    // const token = jwt.sign({ usn: student.usn }, 'secretKey'); // Replace 'secretKey' with your own secret key
+    // Generate JWT token
+    // const token = jwt.sign({ usn: student.usn }, 'secretKey', { expiresIn: '1h' }); // Replace 'secretKey' with your own secret key
 
     res.json({ "token": req.body.usn, "status": "ok", "usn": req.body.usn });
   } catch (error) {
@@ -1291,8 +1460,6 @@ app.post('/api/registerAdmin', async (req, res) => {
   }
 
 })
-
-
 
 
 app.post('/api/adminLogin', async (req, res) => {

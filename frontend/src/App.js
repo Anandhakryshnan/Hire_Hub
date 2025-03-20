@@ -73,6 +73,7 @@ import AboutUs from './components/home/about/AboutUs';
 import Team from './components/home/team/Team';
 import Placement from './components/home/placement/Placement';
 import ContactUs from './components/home/contactUs/ContactUs';
+import StudentAttendance from './components/student/academics/StudentAttendance';
 
 function App() {
   return (
@@ -93,6 +94,7 @@ function App() {
 
           <Route path='/admin/trainingPrograms' element={<AdminTrainingProgs />} />
           <Route path='/admin/companies/add-job' element={<CompanyJobPosting />} />
+          <Route path='/student-attendance' element={<StudentAttendance />} />
 
 
           <Route path='/admin/jobPosting' element={<AdminJobPosting />} />

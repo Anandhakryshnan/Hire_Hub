@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const attendanceSchema = new mongoose.Schema({
-  programId: { type: mongoose.Schema.Types.ObjectId, ref: "Program", required: true },
+  programId: { type: mongoose.Schema.Types.ObjectId, ref: "TrainingProgram", required: true },
   studentId: { type: String, required: true },
   markedAt: { type: Date, default: Date.now },
 });

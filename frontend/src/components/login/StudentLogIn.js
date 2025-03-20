@@ -1,121 +1,132 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import BgColorAnimation from '../../animations/BgColorAnimation';
-import { MdOutlineVisibility, MdOutlineVisibilityOff } from 'react-icons/md';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import BgColorAnimation from "../../animations/BgColorAnimation";
+import { MdOutlineVisibility, MdOutlineVisibilityOff } from "react-icons/md";
 import { CiLogin } from "react-icons/ci";
+import AnimatedGradientBorderTW from "../../components/common/AnimatedGradientBorderTW";
+import ForgotPasswordModal from "../../components/ForgotPasswordModal";
 
 const StudentLogIn = () => {
-    const [usn, setUsn] = useState('');
-    const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate();
+  const [usn, setUsn] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const navigate = useNavigate();
 
-    const handleUsnChange = (event) => {
-        setUsn(event.target.value);
-    };
-
-    const handleRedirection = () => {
-        navigate(`/StudentRegister`)
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await fetch('/api/studentLogin', {
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({ usn, password })
-            });
-            const responseData = await response.json();
-            if (responseData.status === 'ok') {
-                localStorage.setItem('token', responseData.token);
-                navigate(`/StudentHome`, { replace: true });
-            } else {
-                alert(responseData.error);
-            }
-        } catch (error) {
-            console.error('Error:', error);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const response = await fetch('/api/studentLogin', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({ usn, password })
+        });
+        const responseData = await response.json();
+        if (responseData.status === 'ok') {
+            localStorage.setItem('token', responseData.token);
+            navigate(`/StudentHome`, { replace: true });
+        } else {
+            alert(responseData.error);
         }
-    };
+    } catch (error) {
+        console.error('Error:', error);
+    }
+  };
 
-    return (
-        <BgColorAnimation
-            child={
-                <div className="flex items-center justify-center h-screen ">
-                    <form className="bg-[#ffffff2b] shadow-md rounded px-4 md:px-8 py-5 w-[22rem] xsm:w-[26rem] sm:w-[35rem] md:w-[40rem]" onSubmit={handleSubmit}>
-                        <h1 className="text-[2rem] md:text-4xl text-center font-mooli tracking-wider text-violet-300 font-bold mb-6">
-                            Student LogIn
-                        </h1>
-
-                        {/* USN */}
-                        <div className="relative w-full h-full mt-10">
-                            <input
-                                type="text"
-                                className={`border-y-2 pt-2.5 pb-2 pl-2 focus:border-b-2 transition-colors focus:outline-none bg-slate-800 w-full h-full font-robotoMono placeholder:text-blue-300 text-green-300 ${usn ? 'border-indigo-400' : ''} focus:border-indigo-400 pr-3`}
-                                id="usn"
-                                value={usn}
-                                onChange={handleUsnChange}
-                                placeholder="USN"
-                                autoFocus={true}
-                            />
-                        </div>
-
-                        {/* Password */}
-                        <div className="relative w-full h-full mt-10">
-                            <input
-                                type={showPassword ? 'text' : 'password'}
-                                className={`border-y-2 pt-2.5 pb-2 pl-2 focus:border-b-2 transition-colors focus:outline-none bg-slate-800 w-full h-full font-robotoMono placeholder:text-blue-300 text-green-300 ${password ? 'border-indigo-400' : ''} focus:border-indigo-400`}
-                                id="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Password"
-                                required
-                            />
-
-                            <div className="absolute text-xl cursor-pointer right-2 top-3">
-                                {showPassword
-                                    ? <MdOutlineVisibility className="text-blue-300" onClick={() => setShowPassword(!showPassword)} />
-                                    : <MdOutlineVisibilityOff className="text-blue-300" onClick={() => setShowPassword(!showPassword)} />
-                                }
-                            </div>
-                        </div>
-
-                        {/* LogIn */}
-                        <div className="flex items-center justify-between mt-6">
-                            <button className="relative flex items-center w-32 h-10 overflow-hidden rounded-lg cursor-pointer xsm:w-36 bg-slate-900 group hover:bg-slate-900 active:bg-slate-900" type="submit">
-                                <span className="ml-8 font-semibold text-gray-200 transition-all duration-300 transform group-hover:text-slate-900 group-hover:translate-x-20">
-                                    Log In
-                                </span>
-
-                                <span className="absolute right-2 group-hover:-right-2 h-full w-8 rounded-lg bg-slate-900 flex items-center justify-center transform group-hover:translate-x-0 group-hover:w-[110%] transition-all duration-300">
-                                    <CiLogin className="text-2xl text-gray-200 group-hover:text-3xl group-hover:font-bold group-hover:text-green-300" />
-                                </span>
-                            </button>
-
-                            <a className="font-mooli font-bold text-[.85rem] text-blue-400 hover:text-indigo-400" href="#!">
-                                Forgot password?
-                            </a>
-                        </div>
-
-                        {/* Registration */}
-                        <div className="flex items-center justify-between mt-6">
-                            <span className="font-bold text-blue-400 font-mooli text-md">
-                                New student?😐
-                            </span>
-
-                            <button 
-                            className="ml-2 text-md font-bold bg-slate-800 text-blue-400 hover:text-indigo-400 font-robotoMono ring-2 ring-violet-400 px-3 py-[.2rem] rounded-full"
-                            onClick={handleRedirection}>
-                                Register
-                            </button>
-                        </div>
-                    </form>
+  return (
+    <BgColorAnimation
+      child={
+        <div className="flex items-center justify-center min-h-screen p-4">
+          <AnimatedGradientBorderTW>
+            <div className="bg-[#131219] p-8 rounded-xl w-full max-w-md">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* USN Field */}
+                <div className="space-y-2">
+                  <label className="text-cyan-300 text-sm font-medium">
+                    USN
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full bg-slate-800 text-cyan-200 rounded-lg p-3 border border-slate-700 focus:border-violet-500 outline-none"
+                    value={usn}
+                    onChange={(e) => setUsn(e.target.value)}
+                    placeholder="Enter your USN"
+                    required
+                  />
                 </div>
-            }
-        />
-    )
+
+                {/* Password Field */}
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <label className="text-cyan-300 text-sm font-medium">
+                      Password
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setShowForgotPassword(true)}
+                      className="text-blue-400 text-sm hover:text-indigo-400 transition-colors"
+                    >
+                      Forgot Password?
+                    </button>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      className="w-full bg-slate-800 text-cyan-200 rounded-lg p-3 border border-slate-700 focus:border-violet-500 outline-none pr-12"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter your password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-300 hover:text-indigo-400"
+                    >
+                      {showPassword ? (
+                        <MdOutlineVisibility size={24} />
+                      ) : (
+                        <MdOutlineVisibilityOff size={24} />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Login Button */}
+                <button
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white py-3 rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                >
+                  <span>Log In</span>
+                  <CiLogin className="text-xl" />
+                </button>
+
+                {/* Registration Section */}
+                <div className="text-center text-slate-400">
+                  New student?{" "}
+                  <button
+                    onClick={() => navigate("/StudentRegister")}
+                    className="text-violet-400 hover:text-indigo-300 font-medium transition-colors"
+                  >
+                    Create Account
+                  </button>
+                </div>
+              </form>
+            </div>
+          </AnimatedGradientBorderTW>
+
+          {/* Forgot Password Modal */}
+          <ForgotPasswordModal
+            show={showForgotPassword}
+            onClose={() => setShowForgotPassword(false)}
+            userType="student" // or "company" or "trainigcomp"
+          />
+        </div>
+      }
+    />
+  );
 };
 
 export default StudentLogIn;
