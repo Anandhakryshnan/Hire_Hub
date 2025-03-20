@@ -54,7 +54,7 @@ const StudentRegister = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:9000/api/studentRegister",
+        `${process.env.REACT_APP_API_URL}/api/studentRegister`,
         {
           method: "POST",
           headers: {

@@ -19,7 +19,7 @@ const AdminStudent = () => {
 
     useEffect(() => {
         console.log(localStorage.getItem('userid'))
-        fetch('http://localhost:9000/api/getallstudent')
+        fetch(`${process.env.REACT_APP_API_URL}/api/getallstudent`)
             .then((response) => {
                 const reader = response.body.getReader();
                 reader.read().then(({ done, value }) => {

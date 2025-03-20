@@ -19,7 +19,7 @@ const StudentAttendance = () => {
     if (!studentId) return;
 
     axios
-      .get(`/api/student/attendance/${studentId}`)
+      .get(`${process.env.REACT_APP_API_URL}/api/student/attendance/${studentId}`)
       .then((response) => {
         setAttendance(response.data.attendance);
       })

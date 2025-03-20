@@ -55,7 +55,7 @@ const InterviewScheduler = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Phases:", phases);
-    const response = await fetch('http://localhost:9000/api/schedulePhases', {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/schedulePhases`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'

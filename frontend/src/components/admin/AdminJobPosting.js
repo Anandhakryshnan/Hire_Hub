@@ -21,7 +21,7 @@ const AdminJobPosting = () => {
     }
 
     useEffect(() => {
-        fetch('http://localhost:9000/api/getadminposting')
+        fetch(`${process.env.REACT_APP_API_URL}/api/getadminposting`)
             .then((response) => {
                 const reader = response.body.getReader();
                 reader.read().then(({ done, value }) => {

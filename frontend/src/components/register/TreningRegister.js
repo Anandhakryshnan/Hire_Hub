@@ -25,7 +25,7 @@ const TreningRegister = () => {
   const registerCompany = async (e) => {
     e.preventDefault();
     console.log(`Email: ${email} Password: ${password}`);
-    const response = await fetch("http://localhost:9000/api/registerTraining", {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/registerTraining`, {
       method: "POST",
       headers: {
         "Content-type": "application/json",

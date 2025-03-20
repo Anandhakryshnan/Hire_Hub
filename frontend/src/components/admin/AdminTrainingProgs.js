@@ -19,7 +19,7 @@ const AdminDashboard = () => {
 
   // Fetch pending programs
   useEffect(() => {
-    fetch("/api/trainingPrograms/pending")
+    fetch(`${process.env.REACT_APP_API_URL}/api/trainingPrograms/pending`)
       .then((response) => response.json())
       .then((data) => setPendingPrograms(data))
       .catch((error) => console.error("Error fetching pending programs:", error));
@@ -27,14 +27,14 @@ const AdminDashboard = () => {
 
   // Fetch approved programs
   useEffect(() => {
-    fetch("/api/trainingPrograms/approved")
+    fetch(`${process.env.REACT_APP_API_URL}/api/trainingPrograms/approved`)
       .then((response) => response.json())
       .then((data) => setApprovedPrograms(data))
       .catch((error) => console.error("Error fetching approved programs:", error));
   }, []);
 
   const handleAction = (programId, action) => {
-    fetch(`/api/trainingPrograms/${programId}/${action}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/trainingPrograms/${programId}/${action}`, {
       method: "PUT",
     })
       .then((response) => {
@@ -43,7 +43,7 @@ const AdminDashboard = () => {
             prev.filter((program) => program._id !== programId)
           );
           if (action === "approve") {
-            fetch("/api/trainingPrograms/approved")
+            fetch(`${process.env.REACT_APP_API_URL}/api/trainingPrograms/approved`)
               .then((response) => response.json())
               .then((data) => setApprovedPrograms(data));
           }
@@ -55,7 +55,7 @@ const AdminDashboard = () => {
   };
 
   const generateQrCode = (programId) => {
-    fetch(`/api/sessions/generateQr`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/sessions/generateQr`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ programId, durationMinutes: 0.5 }), // 30 seconds

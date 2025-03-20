@@ -21,7 +21,7 @@ const StudentResume = () => {
     const [name, setName] = useState('');
 
     useEffect(() => {
-        fetch(`http://localhost:9000/api/StudentProfile/${usn}`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/StudentProfile/${usn}`)
             .then((response) => response.json())
             .then((data) => {
                 let fullName = `${data?.firstName} ${data?.lastName}`
@@ -44,7 +44,7 @@ const StudentResume = () => {
         formData.append('pdf', pdf);
 
         try {
-            await fetch('http://localhost:9000/api/Resumeupload', {
+            await fetch(`${process.env.REACT_APP_API_URL}/api/Resumeupload`, {
                 method: 'POST',
                 body: formData,
             });

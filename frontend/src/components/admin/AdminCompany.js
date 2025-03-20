@@ -15,7 +15,7 @@ const  AdminCompany = () => {
     const [postingData, setPostingData] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:9000/api/getallcompany')
+        fetch(`${process.env.REACT_APP_API_URL}/api/getallcompany`)
             .then((response) => {
                 const reader = response.body.getReader();
                 reader.read().then(({ done, value }) => {

@@ -34,7 +34,7 @@ function PDFViewer() {
     console.log("hi")
     // Send feedback to the server
     // Replace `/api/feedback` with your server endpoint to handle feedback submission
-    fetch(`http://localhost:9000/api/resume/feedback/${usn}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/resume/feedback/${usn}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ function PDFViewer() {
   return (
     <div>
       <Document
-        file={`http://localhost:9000/api/getResume/${usn}`} // Replace `/api/pdf` with your server route to fetch the PDF
+        file={`${process.env.REACT_APP_API_URL}/api/getResume/${usn}`} // Replace `/api/pdf` with your server route to fetch the PDF
         onLoadSuccess={handleDocumentLoadSuccess}
       >
         <Page pageNumber={currentPage} />

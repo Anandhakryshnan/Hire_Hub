@@ -26,7 +26,7 @@ const StudentHiringView = () => {
     const [name, setName] = useState('');
 
     useEffect(() => {
-        fetch(`http://localhost:9000/api/StudentProfile/${usn}`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/StudentProfile/${usn}`)
             .then((response) => response.json())
             .then((data) => {
                 let fullName = `${data?.firstName} ${data?.lastName}`
@@ -42,7 +42,7 @@ const StudentHiringView = () => {
 	useEffect(() => {
 		const checkApplicationStatus = async () => {
 			try {
-				const response = await fetch('http://localhost:9000/api/checkApplicationStatus', {
+				const response = await fetch(`${process.env.REACT_APP_API_URL}/api/checkApplicationStatus`, {
 					method: 'POST',
 					headers: {
 						'Content-type': 'application/json',
@@ -74,7 +74,7 @@ const StudentHiringView = () => {
 	const handleApply = async (e) => {
 		e.preventDefault();
 
-		const response = await fetch('http://localhost:9000/api/newJobApplied', {
+		const response = await fetch(`${process.env.REACT_APP_API_URL}/api/newJobApplied`, {
 			method: 'POST',
 			headers: {
 				'Content-type': 'application/json',

@@ -26,7 +26,7 @@ const TrainingCompanyDashboard = () => {
 
   useEffect(() => {
     // Fetch training programs
-    fetch(`http://localhost:9000/api/trainingPrograms?companyId=${companyId}`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/trainingPrograms?companyId=${companyId}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -45,7 +45,7 @@ const TrainingCompanyDashboard = () => {
           const appliedData = await Promise.all(
             programs.map((program) =>
               fetch(
-                `http://localhost:9000/api/appliedStudents?programId=${program._id}`
+                `${process.env.REACT_APP_API_URL}/api/appliedStudents?programId=${program._id}`
               )
                 .then((res) => {
                   if (!res.ok) {
@@ -78,7 +78,7 @@ const TrainingCompanyDashboard = () => {
   };
 
   const handleAddProgram = () => {
-    fetch("http://localhost:9000/api/trainingPrograms", {
+    fetch(`${process.env.REACT_APP_API_URL}/api/trainingPrograms`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

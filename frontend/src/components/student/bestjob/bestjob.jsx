@@ -13,7 +13,7 @@ const BestJob = () => {
         const fetchBestJob = async () => {
             try {
                 // student profile
-                const response = await axios.get(`http://localhost:9000/api/StudentProfile/${usn}`);
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/StudentProfile/${usn}`);
                 const studentDetails = response.data;
 
        
@@ -26,7 +26,7 @@ const BestJob = () => {
                 const resumeData = resumeParseResponse.data;
 
                 // Fetch job postings
-                const responsej = await axios.get('http://localhost:9000/api/getAllJobPosted');
+                const responsej = await axios.get(`${process.env.REACT_APP_API_URL}/api/getAllJobPosted`);
                 const jobRequirement = responsej.data;
                 const jobDescriptions = jobRequirement.AllJobPostings.map(job => job.JobDescription);
 

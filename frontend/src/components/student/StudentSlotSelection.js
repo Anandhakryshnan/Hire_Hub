@@ -10,7 +10,7 @@ const StudentSlotSelection = () => {
 
     useEffect(() => {
         // Fetch interview data from the backend API
-        fetch(`http://localhost:9000/api/inveriewSlotAvailability/${usn}`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/inveriewSlotAvailability/${usn}`)
             .then((response) => response.json())
             .then((data) => {
                 setInterviews(data);
@@ -44,7 +44,7 @@ const StudentSlotSelection = () => {
             [id]: true,
         }));
 
-        fetch('http://localhost:9000/api/finalScheduleSelection', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/finalScheduleSelection`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

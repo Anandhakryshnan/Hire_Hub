@@ -14,7 +14,7 @@ const AdminPlacedStudent = () => {
     const [postingData, setPostingData] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:9000/api/appliedcandidatesadmin')
+        fetch(`${process.env.REACT_APP_API_URL}/api/appliedcandidatesadmin`)
             .then((response) => response.json())
             .then((data) => {
                 const acceptedStudents = data.filter((posting) => posting.status === 'accepted');

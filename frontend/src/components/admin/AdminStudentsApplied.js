@@ -15,13 +15,13 @@ const AdminStudentsApplied = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        fetch('http://localhost:9000/api/appliedcandidatesadmin')
+        fetch(`${process.env.REACT_APP_API_URL}/api/appliedcandidatesadmin`)
             .then((response) => response.json())
             .then((data) => setPostingData(data));
     }, []);
 
     const handleDelete = (appliedid) => {
-        fetch(`http://localhost:9000/api/deleteCandidate/${appliedid}`, {method: 'DELETE'})
+        fetch(`${process.env.REACT_APP_API_URL}/api/deleteCandidate/${appliedid}`, {method: 'DELETE'})
             .then((response) => response.json())
             .then((data) => {
                 if (data.success) {

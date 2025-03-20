@@ -35,7 +35,7 @@ const App = () => {
     const [name, setName] = useState('');
     
     useEffect(() => {
-        fetch(`http://localhost:9000/api/sechdule/${usn}`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/sechdule/${usn}`)
         .then(response => response.json())
         .then(data => {			
             setInterviews(data);
@@ -46,7 +46,7 @@ const App = () => {
     }, []);
 
     useEffect(() => {
-        fetch(`http://localhost:9000/api/StudentProfile/${usn}`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/StudentProfile/${usn}`)
             .then((response) => response.json())
             .then((data) => {
                 let fullName = `${data?.firstName} ${data?.lastName}`

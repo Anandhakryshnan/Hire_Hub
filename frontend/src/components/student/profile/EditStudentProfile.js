@@ -58,7 +58,7 @@ const StudentProfileEdit = () => {
     useEffect(() => {
         const fetchProfileData = async () => {
         try {
-            const response = await fetch(`http://localhost:9000/api/studentProfile/${usn}`);
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/studentProfile/${usn}`);
             const data = await response.json();
             if (response.ok) {
                 setFormData(data);
@@ -85,7 +85,7 @@ const StudentProfileEdit = () => {
 
         try {
             const response = await fetch(
-                `http://localhost:9000/api/updateProfile/${usn}`, {
+                `${process.env.REACT_APP_API_URL}/api/updateProfile/${usn}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

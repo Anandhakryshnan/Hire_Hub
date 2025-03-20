@@ -21,7 +21,7 @@ const AllPrograms = () => {
 
   useEffect(() => {
     // Fetch student profile
-    fetch(`http://localhost:9000/api/StudentProfile/${usn}`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/StudentProfile/${usn}`)
       .then((response) => response.json())
       .then((data) => {
         let fullName = `${data?.firstName} ${data?.lastName}`;
@@ -32,13 +32,13 @@ const AllPrograms = () => {
       });
 
     // Fetch approved programs
-    fetch("/api/trainingPrograms/approved")
+    fetch(`${process.env.REACT_APP_API_URL}/api/trainingPrograms/approved`)
       .then((response) => response.json())
       .then((data) => setApprovedPrograms(data))
       .catch((error) => console.error("Error fetching programs:", error));
 
     // Fetch applied programs and materials
-    fetch(`/api/students/${usn}/appliedPrograms`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/students/${usn}/appliedPrograms`)
       .then((response) => response.json())
       .then((data) => {
         const validAppliedPrograms = data.filter(
@@ -47,7 +47,7 @@ const AllPrograms = () => {
         setAppliedProgramsState(validAppliedPrograms);
 
         const materialsPromises = validAppliedPrograms.map((appliedProgram) =>
-          fetch(`/api/materials/${appliedProgram._id}?studentId=${usn}`)
+          fetch(`${process.env.REACT_APP_API_URL}/api/materials/${appliedProgram._id}?studentId=${usn}`)
             .then((response) => (response.ok ? response.json() : []))
             .catch((error) => {
               console.error("Error fetching materials:", error);
@@ -73,7 +73,7 @@ const AllPrograms = () => {
   const handleApply = (programId) => {
     const studentId = localStorage.getItem("token");
 
-    fetch(`/api/trainingPrograms/${programId}/apply`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/trainingPrograms/${programId}/apply`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -85,7 +85,7 @@ const CompanyInterview = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:9000/api/companySechdule/${cemail}`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/companySechdule/${cemail}`)
             .then(response => response.json())
             .then(data => {
                 setInterviews(data);

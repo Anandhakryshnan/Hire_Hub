@@ -34,7 +34,7 @@ const ApplicationTable = () => {
     };
 
     const handleStatusChange = (id, status) => {
-        fetch(`http://localhost:9000/api/updateApplicationStatus/${id}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/api/updateApplicationStatus/${id}`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ id, status })
@@ -56,7 +56,7 @@ const ApplicationTable = () => {
             content: feedbackText,
         };
         
-        fetch('http://localhost:9000/api/sendFeedback', {
+        fetch(`${process.env.REACT_APP_API_URL}/api/sendFeedback`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

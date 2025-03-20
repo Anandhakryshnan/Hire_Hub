@@ -20,7 +20,7 @@ const TrainingCompLogin = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:9000/api/trainingCompanyLogin",
+          `${process.env.REACT_APP_API_URL}/api/trainingCompanyLogin`,
         {
           method: "POST",
           headers: {

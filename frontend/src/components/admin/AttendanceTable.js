@@ -13,7 +13,7 @@ const AttendanceTable = () => {
   // Fetch attendance data for the given programId
   useEffect(() => {
     if (programId) {
-      fetch(`/api/attendance/${programId}`)
+      fetch(`${process.env.REACT_APP_API_URL}/api/attendance/${programId}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error("Error fetching attendance data");

@@ -65,7 +65,7 @@ const StudentHome = () => {
   });
 
   useEffect(() => {
-    fetch(`/api/StudentProfile/${usn}`)
+    fetch(`${process.env.REACT_APP_API_URL}/api/StudentProfile/${usn}`)
       .then((response) => response.json())
       .then((data) => {
         let fullName = `${data?.firstName} ${data?.lastName}`;
@@ -145,7 +145,7 @@ const NavBar = ({ name }) => {
       const qrToken = data.text;
       const studentId = localStorage.getItem("token");
 
-      fetch("/api/markAttendance", {
+      fetch(`${process.env.REACT_APP_API_URL}/api/markAttendance`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ qrToken, studentId }),

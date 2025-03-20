@@ -21,7 +21,7 @@ const AdminRegister = () => {
         console.log(username, email, password);
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:9000/api/registerAdmin', {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/registerAdmin`, {
                 method: 'POST',
                 headers: {
                     'Content-type': 'application/json'

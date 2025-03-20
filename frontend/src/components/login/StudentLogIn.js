@@ -16,7 +16,7 @@ const StudentLogIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await fetch('/api/studentLogin', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/studentLogin`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'

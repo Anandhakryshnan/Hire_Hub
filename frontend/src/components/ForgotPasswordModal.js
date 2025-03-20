@@ -18,7 +18,7 @@ const ForgotPasswordModal = ({ show, onClose, userType }) => {
 
     try {
       // Call backend API to send OTP
-      const response = await fetch('/api/auth/send-otp', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/send-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, userType }),
@@ -55,7 +55,7 @@ const ForgotPasswordModal = ({ show, onClose, userType }) => {
 
     try {
       // Call backend API to verify OTP
-      const response = await fetch('/api/auth/verify-otp', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ otp, otpToken }),
@@ -101,7 +101,7 @@ const ForgotPasswordModal = ({ show, onClose, userType }) => {
 
     try {
       // Call backend API to reset password
-      const response = await fetch('/api/auth/reset-password', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resetToken: otpToken, newPassword, confirmPassword }),

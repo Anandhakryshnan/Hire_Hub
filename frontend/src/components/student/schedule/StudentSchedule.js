@@ -15,7 +15,7 @@ const StudentSchedule = () => {
     const [name, setName] = useState('');
 
     useEffect(() => {
-        fetch(`http://localhost:9000/api/StudentProfile/${usn}`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/StudentProfile/${usn}`)
             .then((response) => response.json())
             .then((data) => {
                 let fullName = `${data?.firstName} ${data?.lastName}`

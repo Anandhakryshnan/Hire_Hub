@@ -7,7 +7,7 @@ const FeedbackTable = () => {
     useEffect(() => {
         (async () => {
             try {
-                const response = await fetch(`http://localhost:9000/api/getfeedback/${usn}`);
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/api/getfeedback/${usn}`);
                 const data = await response.json();
                 setFeedback(data);
             } catch (error) {

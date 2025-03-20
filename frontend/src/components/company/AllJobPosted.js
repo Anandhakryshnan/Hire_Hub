@@ -17,7 +17,7 @@ const AllJobPosted = () => {
     useEffect(() => {
         const id = localStorage.getItem('token');
 
-        fetch(`http://localhost:9000/api/getJobPosted/${id}`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/getJobPosted/${id}`)
             .then((response) => {
                 const reader = response.body.getReader();
                 reader.read().then(({ done, value }) => {
@@ -34,7 +34,7 @@ const AllJobPosted = () => {
     }, [])
     const handleViewApplicants = (jobId) => {
         
-        fetch(`http://localhost:9000/api/getCandidateList/${jobId}`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/getCandidateList/${jobId}`)
             .then((response) => response.json())
             .then((data) => {
                 navigate('/LOSA', { state: { data: data } });

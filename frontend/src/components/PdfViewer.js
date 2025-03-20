@@ -10,7 +10,7 @@ const PDFViewer = () => {
   useEffect(() => {
     const fetchPDF = async () => {
       try {
-        const response = await fetch(`http://localhost:9000/api/getResume/${usn}`); // Replace with your backend API endpoint to fetch the PDF
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/getResume/${usn}`); // Replace with your backend API endpoint to fetch the PDF
         if (response.ok) {
           const blob = await response.blob();
           const url = URL.createObjectURL(blob);

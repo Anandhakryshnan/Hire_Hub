@@ -18,7 +18,7 @@ const HiringCompanies = () => {
     const [name, setName] = useState('');
 
     useEffect(() => {
-        fetch(`http://localhost:9000/api/StudentProfile/${usn}`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/StudentProfile/${usn}`)
             .then((response) => response.json())
             .then((data) => {
                 let fullName = `${data?.firstName} ${data?.lastName}`
@@ -36,7 +36,7 @@ const HiringCompanies = () => {
 
     useEffect(() => {
         console.log(localStorage.getItem('userid'))
-        fetch('http://localhost:9000/api/getposting')
+        fetch(`${process.env.REACT_APP_API_URL}/api/getposting`)
             .then((response) => {
                 const reader = response.body.getReader();
                 reader.read().then(({ done, value }) => {

@@ -15,7 +15,7 @@ const StudentProfile = () => {
     const usn = localStorage.getItem('token');   // take usn from here to implement that job matchin
 
     useEffect(() => {
-        fetch(`http://localhost:9000/api/studentProfile/${usn}`)
+        fetch(`${process.env.REACT_APP_API_URL}/api/studentProfile/${usn}`)
         .then(response => response.json())
         .then(data => {
             setStudentData(data);
