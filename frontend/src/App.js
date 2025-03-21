@@ -74,6 +74,7 @@ import Team from './components/home/team/Team';
 import Placement from './components/home/placement/Placement';
 import ContactUs from './components/home/contactUs/ContactUs';
 import StudentAttendance from './components/student/academics/StudentAttendance';
+import NotFound from './components/common/NotFound';
 
 function App() {
   return (
@@ -156,6 +157,7 @@ function App() {
           <Route path="/placement" element={<Placement />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/bestjob" element={<BestJob />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </div>
