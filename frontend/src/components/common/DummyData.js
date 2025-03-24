@@ -65,7 +65,7 @@ import { AiOutlineContacts } from "react-icons/ai";
 
 import appu from "../../images/team/Anandhu.png";
 import har from "../../images/team/Harsha.png";
-import aisu from "../../images/team/Anandhu.png";
+import aisu from "../../images/team/Aishu.jpg";
 import aju from "../../images/team/Ajanya.png";
 
 export const onlineCourses = [
