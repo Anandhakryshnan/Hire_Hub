@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
-import { TiHomeOutline } from "react-icons/ti";
-import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
-import { CiLogout } from "react-icons/ci";
-import { GoSearch } from "react-icons/go";
-import { TbDatabaseSearch } from "react-icons/tb";
-import { FaRegUser, FaPeopleArrows } from "react-icons/fa";
 import BgColorAnimation from "../../animations/BgColorAnimation";
 
 const TrainingCompanyDashboard = () => {

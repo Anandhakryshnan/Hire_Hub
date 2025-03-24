@@ -10,10 +10,7 @@ import { TbDatabaseSearch } from "react-icons/tb";
 import { FaArrowRightLong } from "react-icons/fa6";
 import banner from '../../images/banner/homeback.jpg';
 import aboutUs from '../../images/banner/aboutUs.jpg';
-import statBg from '../../images/stats/statBg.jpg';
-import { aboutUsCardContent, buttonsData, coursesCard, footerLists, onlineCourses, statCard, tabs } from '../common/DummyData';
-import { GoArrowLeft, GoArrowRight } from "react-icons/go";
-import { TiStarFullOutline  } from "react-icons/ti";
+import { buttonsData, coursesCard, tabs } from '../common/DummyData';
 
 const ButtonWithCard = ({ imgSrc, alt, text, bgColor, textColor, titleColor }) => {
     return (
@@ -252,8 +249,7 @@ export const NavBar = ({selectedTab }) => {
     const registerOptions = [
         { href: '/StudentRegister', text: 'Student Register', icon: <PiStudentDuotone/> },
         { href: '/CompanyRegister', text: 'Company Register', icon: <MdOutlineAdminPanelSettings/> },
-        { href: '/AdminRegister', text: 'Admin Register', icon: <FaBuildingUser/> },
-        { href: '/TreningRegister', text: 'Trening Register', icon: <MdOutlineAdminPanelSettings/> }
+        { href: '/TreningRegister', text: 'Training Register', icon: <MdOutlineAdminPanelSettings/> }
 
     ];
 
@@ -479,7 +475,7 @@ const userActions = ({selectedArray}) => {
     return (
         <div className=" bg-gradient-to-b from-violet-800 to-indigo-900 rounded-lg py-2.5 lg:py-4 shadow-xl">
             {selectedArray.map((item, index) => (
-                <a 
+                <a
                 className='w-[12rem] lg:w-[15rem] pl-4 xl:pl-6 no-underline flex items-center py-2 gap-x-3 hover:bg-gradient-to-l hover:from-violet-600 hover:to-indigo-600'
                 href={item.href}
                 key={item.text+index}>

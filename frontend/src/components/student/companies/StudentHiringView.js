@@ -114,7 +114,7 @@ const StudentHiringView = () => {
 						<div className='relative px-3 py-2 overflow-y-auto bg-slate-20 Lmd:rounded-lg bg-slate-300 Lmd:bg-transparent'>
 							<img 
 								className="w-full h-full absolute top-0 left-0 -z-10 blur-[80px] object-cover hidden Lmd:block" 
-								src={gamingPc} 
+								src={gamingPc}
 								alt="Job Image" 
 							/>
 
