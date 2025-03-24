@@ -113,8 +113,8 @@ app.post('/api/auth/send-otp', async (req, res) => {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Password Reset OTP',
-      html: `<p>Your OTP is: <strong>${otp}</strong></p>`
+      subject: 'Password Reset OTP [Hire-Hub]',
+      html: `<p>Your OTP to reset hire-hub password is: <strong>${otp}</strong></p>`
     });
 
     res.json({ 
